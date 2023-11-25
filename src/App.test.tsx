@@ -1,7 +1,8 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-var mockResponse = {};
+let mockResponse = {};
 
 jest.mock('react-oidc-context', () => ({
   useAuth: () => mockResponse,
