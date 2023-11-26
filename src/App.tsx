@@ -1,6 +1,9 @@
 import React from 'react';
 import './App.css';
 import { useAuth } from 'react-oidc-context';
+import { Button } from '@mui/material';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 function Auth() {
   const auth = useAuth();
@@ -25,12 +28,26 @@ function Auth() {
     return (
       <div>
         Hello {auth.user?.profile.preferred_username}
-        <button onClick={() => void auth.removeUser()}>Log out</button>
+        <Button
+          onClick={() => void auth.removeUser()}
+          variant="contained"
+          startIcon={<LogoutIcon />}
+        >
+          Log out
+        </Button>
       </div>
     );
   }
 
-  return <button onClick={() => void auth.signinRedirect()}>Log in</button>;
+  return (
+    <Button
+      onClick={() => void auth.signinRedirect()}
+      variant="contained"
+      startIcon={<LoginIcon />}
+    >
+      Log in
+    </Button>
+  );
 }
 
 function App() {
