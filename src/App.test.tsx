@@ -1,18 +1,17 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import { test, expect, vi } from 'vitest';
 
 let mockResponse = {};
 
-jest.mock(
-  './auth/Auth',
-  () =>
-    function Auth(props: { children: ReactNode }) {
-      return <div>{props.children}</div>;
-    },
-);
+vi.mock('./auth/Auth', () => ({
+  default: function Auth(props: { children: ReactNode }) {
+    return <div>{props.children}</div>;
+  },
+}));
 
-jest.mock('react-oidc-context', () => ({
+vi.mock('react-oidc-context', () => ({
   useAuth: () => mockResponse,
 }));
 

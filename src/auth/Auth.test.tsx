@@ -1,15 +1,15 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Auth from './Auth';
+import { test, expect, vi } from 'vitest';
 
 let mockResponse = {};
 
-jest.mock('react-oidc-context', () => ({
+vi.mock('react-oidc-context', () => ({
   useAuth: () => mockResponse,
 }));
 
 test('renders login', () => {
-  const signinRedirect = jest.fn();
+  const signinRedirect = vi.fn();
 
   mockResponse = {
     signinRedirect,

@@ -1,4 +1,3 @@
-import React from 'react';
 import './App.css';
 import { useAuth } from 'react-oidc-context';
 import { Button } from '@mui/material';
