@@ -4,15 +4,15 @@ import App from './App.tsx';
 import './index.css';
 import { AuthProvider } from 'react-oidc-context';
 
-const oidcConfig = {
-  authority: 'http://localhost:8081/realms/clubmanager1999',
-  client_id: 'clubmanager1999-frontend',
-  redirect_uri: 'http://localhost:5173',
+const config = {
+  authority: import.meta.env.VITE_OIDC_AUTHORITY,
+  client_id: import.meta.env.VITE_OIDC_CLIENT_ID,
+  redirect_uri: import.meta.env.VITE_OIDC_REDIRECT_URI,
 };
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AuthProvider {...oidcConfig}>
+    <AuthProvider {...config}>
       <App />
     </AuthProvider>
   </React.StrictMode>,
