@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import './Auth.css';
 import { AuthContextProps, useAuth } from 'react-oidc-context';
 
