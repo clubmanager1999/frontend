@@ -1,0 +1,9 @@
+services:
+  backend:
+    image: ghcr.io/clubmanager1999/frontend:latest
+    environment:
+      REPLACE_VITE_OIDC_AUTHORITY: 'http://localhost:8081/realms/clubmanager1999'
+      REPLACE_VITE_OIDC_CLIENT_ID: 'clubmanager1999-frontend'
+      REPLACE_VITE_OIDC_REDIRECT_URI: 'http://localhost:8082'
+    ports:
+      - 8082:80
