@@ -30,6 +30,6 @@ test('renders logout', () => {
   const helloElement = screen.getByText(/Hello foo/i);
   expect(helloElement).toBeInTheDocument();
 
-  const logoutElement = screen.getByText(/Log out/i);
+  const logoutElement = screen.getAllByText(/Log out/i)[0];
   expect(logoutElement).toBeInTheDocument();
 });
