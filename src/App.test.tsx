@@ -11,6 +11,12 @@ vi.mock('./auth/Auth', () => ({
   },
 }));
 
+vi.mock('./profile/Profile', () => ({
+  default: function Profile() {
+    return <div>foo</div>;
+  },
+}));
+
 vi.mock('react-oidc-context', () => ({
   useAuth: () => mockResponse,
 }));
@@ -27,7 +33,7 @@ test('renders logout', () => {
 
   render(<App />);
 
-  const helloElement = screen.getByText(/Hello foo/i);
+  const helloElement = screen.getByText(/foo/i);
   expect(helloElement).toBeInTheDocument();
 
   const logoutElement = screen.getAllByText(/Log out/i)[0];
