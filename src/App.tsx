@@ -14,6 +14,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Auth from './auth/Auth';
+import Profile from './profile/Profile';
 
 const drawerWidth = 180;
 
@@ -80,9 +81,7 @@ function App() {
           }}
         >
           <Toolbar />
-          <Typography paragraph>
-            Hello {auth.user?.profile.preferred_username}
-          </Typography>
+          <Profile />
         </Box>
       </Box>
     </Auth>
