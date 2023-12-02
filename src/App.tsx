@@ -79,10 +79,26 @@ function App() {
           >
             <Toolbar />
             <Divider />
-            <List>
-              {navLink('Home', '/', <HomeIcon />)}
-              {navLink('Profile', '/profile', <SettingsIcon />)}
-              {navCallback('Log out', () => auth.removeUser(), <LogoutIcon />)}
+            <List sx={{ height: '100%' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  'flex-direction': 'column',
+                  'justify-content': 'flex-end',
+                  height: '100%',
+                }}
+              >
+                {navLink('Home', '/', <HomeIcon />)}
+                {navLink('Profile', '/profile', <SettingsIcon />)}
+
+                <Box sx={{ 'margin-top': 'auto' }}>
+                  {navCallback(
+                    'Log out',
+                    () => auth.removeUser(),
+                    <LogoutIcon />,
+                  )}
+                </Box>
+              </Box>
             </List>
           </Drawer>
         </Box>
