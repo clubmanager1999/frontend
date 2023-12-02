@@ -11,12 +11,35 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LogoutIcon from '@mui/icons-material/Logout';
+import HomeIcon from '@mui/icons-material/Home';
+import SettingsIcon from '@mui/icons-material/Settings';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Auth from './auth/Auth';
-import Profile from './profile/Profile';
-
+import { Outlet, NavLink } from 'react-router-dom';
 const drawerWidth = 180;
+
+function navLink(name: string, path: string, icon: JSX.Element) {
+  return (
+    <ListItem disablePadding>
+      <ListItemButton component={NavLink} to={path}>
+        <ListItemIcon>{icon}</ListItemIcon>
+        <ListItemText className="app-drawer-active" primary={name} />
+      </ListItemButton>
+    </ListItem>
+  );
+}
+
+function navCallback(name: string, callback: () => void, icon: JSX.Element) {
+  return (
+    <ListItem disablePadding>
+      <ListItemButton>
+        <ListItemIcon>{icon}</ListItemIcon>
+        <ListItemText primary={name} onClick={callback} />
+      </ListItemButton>
+    </ListItem>
+  );
+}
 
 function App() {
   const auth = useAuth();
@@ -35,7 +58,7 @@ function App() {
         >
           <Toolbar>
             <Typography variant="h6" noWrap component="div">
-              Home
+              Welcome
             </Typography>
           </Toolbar>
         </AppBar>
@@ -57,17 +80,9 @@ function App() {
             <Toolbar />
             <Divider />
             <List>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <LogoutIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Log out"
-                    onClick={() => auth.removeUser()}
-                  />
-                </ListItemButton>
-              </ListItem>
+              {navLink('Home', '/', <HomeIcon />)}
+              {navLink('Profile', '/profile', <SettingsIcon />)}
+              {navCallback('Log out', () => auth.removeUser(), <LogoutIcon />)}
             </List>
           </Drawer>
         </Box>
@@ -81,7 +96,7 @@ function App() {
           }}
         >
           <Toolbar />
-          <Profile />
+          <Outlet />
         </Box>
       </Box>
     </Auth>
