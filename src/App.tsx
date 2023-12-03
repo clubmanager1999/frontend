@@ -13,6 +13,7 @@ import ListItemText from '@mui/material/ListItemText';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
+import PeopleIcon from '@mui/icons-material/People';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Auth from './auth/Auth';
@@ -90,6 +91,7 @@ function App() {
               >
                 {navLink('Home', '/', <HomeIcon />)}
                 {navLink('Profile', '/profile', <SettingsIcon />)}
+                {navLink('Members', '/members', <PeopleIcon />)}
 
                 <Box sx={{ 'margin-top': 'auto' }}>
                   {navCallback(

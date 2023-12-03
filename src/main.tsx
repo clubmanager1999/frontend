@@ -6,6 +6,8 @@ import { AuthProvider } from 'react-oidc-context';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './home/Home.tsx';
 import Profile from './profile/Profile.tsx';
+import MemberList from './member/MemberList.tsx';
+import MemberDetail from './member/MemberDetail.tsx';
 
 const config = {
   authority: import.meta.env.VITE_OIDC_AUTHORITY,
@@ -25,6 +27,14 @@ const router = createBrowserRouter([
       {
         path: '/profile',
         element: <Profile />,
+      },
+      {
+        path: '/members',
+        element: <MemberList />,
+      },
+      {
+        path: '/members/:id',
+        element: <MemberDetail />,
       },
     ],
   },
