@@ -84,8 +84,7 @@ function App() {
               <Box
                 sx={{
                   display: 'flex',
-                  'flex-direction': 'column',
-                  'justify-content': 'flex-end',
+                  flexDirection: 'column',
                   height: '100%',
                 }}
               >
@@ -93,7 +92,7 @@ function App() {
                 {navLink('Profile', '/profile', <SettingsIcon />)}
                 {navLink('Members', '/members', <PeopleIcon />)}
 
-                <Box sx={{ 'margin-top': 'auto' }}>
+                <Box sx={{ marginTop: 'auto' }}>
                   {navCallback(
                     'Log out',
                     () => auth.removeUser(),
