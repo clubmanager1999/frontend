@@ -8,6 +8,8 @@ import Home from './home/Home.tsx';
 import Profile from './profile/Profile.tsx';
 import MemberList from './member/MemberList.tsx';
 import MemberDetail from './member/MemberDetail.tsx';
+import ApiClientProvider from './api/ApiClientProvider.tsx';
+import Auth from './auth/Auth.tsx';
 
 const config = {
   authority: import.meta.env.VITE_OIDC_AUTHORITY,
@@ -43,7 +45,11 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthProvider {...config}>
-      <RouterProvider router={router} />
+      <Auth>
+        <ApiClientProvider>
+          <RouterProvider router={router} />
+        </ApiClientProvider>
+      </Auth>
     </AuthProvider>
   </React.StrictMode>,
 );
