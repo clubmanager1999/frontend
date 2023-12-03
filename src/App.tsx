@@ -16,7 +16,6 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import PeopleIcon from '@mui/icons-material/People';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Auth from './auth/Auth';
 import { Outlet, NavLink } from 'react-router-dom';
 const drawerWidth = 180;
 
@@ -46,77 +45,75 @@ function App() {
   const auth = useAuth();
 
   return (
-    <Auth>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
 
-        <AppBar
-          position="fixed"
+      <AppBar
+        position="fixed"
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+        }}
+      >
+        <Toolbar>
+          <Typography variant="h6" noWrap component="div">
+            Welcome
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      >
+        <Drawer
+          variant="permanent"
           sx={{
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-            ml: { sm: `${drawerWidth}px` },
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+            },
           }}
-        >
-          <Toolbar>
-            <Typography variant="h6" noWrap component="div">
-              Welcome
-            </Typography>
-          </Toolbar>
-        </AppBar>
-
-        <Box
-          component="nav"
-          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        >
-          <Drawer
-            variant="permanent"
-            sx={{
-              '& .MuiDrawer-paper': {
-                width: drawerWidth,
-                boxSizing: 'border-box',
-              },
-            }}
-            open
-          >
-            <Toolbar />
-            <Divider />
-            <List sx={{ height: '100%' }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: '100%',
-                }}
-              >
-                {navLink('Home', '/', <HomeIcon />)}
-                {navLink('Profile', '/profile', <SettingsIcon />)}
-                {navLink('Members', '/members', <PeopleIcon />)}
-
-                <Box sx={{ marginTop: 'auto' }}>
-                  {navCallback(
-                    'Log out',
-                    () => auth.removeUser(),
-                    <LogoutIcon />,
-                  )}
-                </Box>
-              </Box>
-            </List>
-          </Drawer>
-        </Box>
-
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            p: 3,
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-          }}
+          open
         >
           <Toolbar />
-          <Outlet />
-        </Box>
+          <Divider />
+          <List sx={{ height: '100%' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+              }}
+            >
+              {navLink('Home', '/', <HomeIcon />)}
+              {navLink('Profile', '/profile', <SettingsIcon />)}
+              {navLink('Members', '/members', <PeopleIcon />)}
+
+              <Box sx={{ marginTop: 'auto' }}>
+                {navCallback(
+                  'Log out',
+                  () => auth.removeUser(),
+                  <LogoutIcon />,
+                )}
+              </Box>
+            </Box>
+          </List>
+        </Drawer>
       </Box>
-    </Auth>
+
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+        }}
+      >
+        <Toolbar />
+        <Outlet />
+      </Box>
+    </Box>
   );
 }
 

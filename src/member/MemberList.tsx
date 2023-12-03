@@ -1,4 +1,3 @@
-import { useAuth } from 'react-oidc-context';
 import { useEffect, useState } from 'react';
 import { MemberDto } from '../data/member';
 import {
@@ -12,30 +11,27 @@ import {
   Button,
 } from '@mui/material';
 import { NavLink } from 'react-router-dom';
+import { useApiClient } from '../api/ApiClientContext';
 
 export default function MemberList() {
-  const auth = useAuth();
+  const api = useApiClient();
   const [members, setMembers] = useState(null as MemberDto[] | null);
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch('http://localhost:8080/api/members', {
-        headers: {
-          Authorization: `Bearer ${auth.user?.access_token}`,
-        },
-      });
+      const result = await api.fetchMembers();
 
-      if (response.status == 200) {
-        setMembers(await response.json());
-      } else {
-        if (response.status >= 400) {
-          console.log(await response.text());
-        }
+      if (result.value) {
+        setMembers(result.value);
+      }
+
+      if (result.error) {
+        console.log(result.error);
       }
     }
 
     fetchData();
-  }, [auth.user?.access_token]);
+  }, [api]);
 
   return (
     <TableContainer component={Paper}>

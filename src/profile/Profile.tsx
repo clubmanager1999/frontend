@@ -1,31 +1,27 @@
 import { Stack, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useAuth } from 'react-oidc-context';
 import { ProfileDto } from '../data/profile';
+import { useApiClient } from '../api/ApiClientContext';
 
 function Profile() {
-  const auth = useAuth();
   const [profile, setProfile] = useState(null as ProfileDto | null);
+  const api = useApiClient();
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch('http://localhost:8080/api/profile', {
-        headers: {
-          Authorization: `Bearer ${auth.user?.access_token}`,
-        },
-      });
+      const result = await api.fetchProfile();
 
-      if (response.status == 200) {
-        setProfile(await response.json());
-      } else {
-        if (response.status >= 400) {
-          console.log(await response.text());
-        }
+      if (result.value) {
+        setProfile(result.value);
+      }
+
+      if (result.error) {
+        console.log(result.error);
       }
     }
 
     fetchData();
-  }, [auth.user?.access_token]);
+  }, [api]);
 
   return (
     <div>
