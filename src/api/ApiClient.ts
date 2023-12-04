@@ -1,6 +1,7 @@
 import { ProfileDto } from '../data/profile';
 import { ApiError } from '../data/error';
 import { MemberDto } from '../data/member';
+import { MembershipDto } from '../data/membership';
 
 export class ApiClient {
   constructor(private accessToken: string) {}
@@ -15,6 +16,10 @@ export class ApiClient {
 
   public async fetchMembers(): Promise<Result<MemberDto[], ApiError>> {
     return fetchData('/api/members', this.accessToken);
+  }
+
+  public async fetchMemberships(): Promise<Result<MembershipDto[], ApiError>> {
+    return fetchData('/api/memberships', this.accessToken);
   }
 }
 
