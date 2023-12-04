@@ -9,6 +9,10 @@ export class ApiClient {
     return fetchData('/api/profile', this.accessToken);
   }
 
+  public async fetchMember(id: string): Promise<Result<MemberDto, ApiError>> {
+    return fetchData(`/api/members/${id}`, this.accessToken);
+  }
+
   public async fetchMembers(): Promise<Result<MemberDto[], ApiError>> {
     return fetchData('/api/members', this.accessToken);
   }

@@ -1,33 +1,33 @@
 import { useEffect, useState } from 'react';
 import { MemberDto } from '../data/member';
-import { useAuth } from 'react-oidc-context';
 import { Stack, TextField } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import { useApiClient } from '../api/ApiClientContext';
 
 export default function MemberDetail() {
-  const auth = useAuth();
   const [member, setMember] = useState(null as MemberDto | null);
   const { id } = useParams();
+  const api = useApiClient();
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(`http://localhost:8080/api/members/${id}`, {
-        headers: {
-          Authorization: `Bearer ${auth.user?.access_token}`,
-        },
-      });
+      if (!id) {
+        return;
+      }
 
-      if (response.status == 200) {
-        setMember(await response.json());
-      } else {
-        if (response.status >= 400) {
-          console.log(await response.text());
-        }
+      const result = await api.fetchMember(id);
+
+      if (result.value) {
+        setMember(result.value);
+      }
+
+      if (result.error) {
+        console.log(result.error);
       }
     }
 
     fetchData();
-  }, [auth.user?.access_token, id]);
+  }, [api, id]);
 
   return (
     <div>
