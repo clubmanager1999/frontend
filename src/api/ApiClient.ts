@@ -10,8 +10,21 @@ export class ApiClient {
     return fetchData('/api/profile', this.accessToken);
   }
 
+  public async updateProfile(
+    profile: ProfileDto,
+  ): Promise<Result<ProfileDto, ApiError>> {
+    return putData(`/api/profile`, this.accessToken, profile);
+  }
+
   public async fetchMember(id: string): Promise<Result<MemberDto, ApiError>> {
     return fetchData(`/api/members/${id}`, this.accessToken);
+  }
+
+  public async updateMember(
+    id: string,
+    member: MemberDto,
+  ): Promise<Result<MemberDto, ApiError>> {
+    return putData(`/api/members/${id}`, this.accessToken, member);
   }
 
   public async fetchMembers(): Promise<Result<MemberDto[], ApiError>> {
@@ -27,9 +40,38 @@ async function fetchData<T, E>(
   path: string,
   accessToken: string,
 ): Promise<Result<T, E>> {
+  return exec(path, accessToken);
+}
+
+async function putData<T, E>(
+  path: string,
+  accessToken: string,
+  body: T,
+): Promise<Result<T, E>> {
+  return exec(
+    path,
+    accessToken,
+    {
+      method: 'PUT',
+      body: JSON.stringify(body),
+    },
+    {
+      'Content-Type': 'application/json',
+    },
+  );
+}
+
+async function exec<T, E>(
+  path: string,
+  accessToken: string,
+  init?: RequestInit,
+  extraHeaders?: Record<string, string>,
+): Promise<Result<T, E>> {
   const response = await fetch(`http://localhost:8080${path}`, {
+    ...init,
     headers: {
       Authorization: `Bearer ${accessToken}`,
+      ...extraHeaders,
     },
   });
 

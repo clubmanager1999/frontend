@@ -1,21 +1,9 @@
-import { Stack, TextField } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ProfileDto } from '../data/profile';
 import { useApiClient } from '../api/ApiClientContext';
-
-function textInput(label: string, value?: string) {
-  return (
-    <TextField
-      type="text"
-      variant="outlined"
-      color="secondary"
-      label={label}
-      value={value ?? ''}
-      required
-      sx={{ mb: 4, width: '200px' }}
-    />
-  );
-}
+import { AddressDto } from '../data/address';
+import { textInput } from '../utils/textInput';
 
 function Profile() {
   const [profile, setProfile] = useState(null as ProfileDto | null);
@@ -40,27 +28,53 @@ function Profile() {
     fetchData();
   }, [api]);
 
+  function profileTextInput(label: string, key: keyof ProfileDto) {
+    return textInput<ProfileDto>(label, profile, key, (value) => {
+      if (profile) {
+        setProfile({ ...profile, ...{ [key]: value } });
+      }
+    });
+  }
+
+  function addressTextInput(label: string, key: keyof AddressDto) {
+    return textInput<AddressDto>(label, profile?.address, key, (value) => {
+      if (profile) {
+        const newAddress = { ...profile.address, ...{ [key]: value } };
+        setProfile({ ...profile, ...{ address: newAddress } });
+      }
+    });
+  }
+
+  function update() {
+    if (profile) {
+      api.updateProfile(profile);
+    }
+  }
+
   return (
     <div>
       <form>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {textInput('First Name', profile?.firstName)}
-            {textInput('Last Name', profile?.lastName)}
+            {profileTextInput('First Name', 'firstName')}
+            {profileTextInput('Last Name', 'lastName')}
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {textInput('Username', profile?.userName)}
-            {textInput('Email', profile?.email)}
+            {profileTextInput('Username', 'userName')}
+            {profileTextInput('Email', 'email')}
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {textInput('Street', profile?.address.street)}
-            {textInput('Streetnumber', profile?.address.streetNumber)}
+            {addressTextInput('Street', 'street')}
+            {addressTextInput('Streetnumber', 'streetNumber')}
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {textInput('City', profile?.address.city)}
-            {textInput('Zip', profile?.address.zip)}
+            {addressTextInput('City', 'city')}
+            {addressTextInput('Zip', 'zip')}
           </Stack>
         </Stack>
+        <Button variant="contained" onClick={() => update()}>
+          Save
+        </Button>
       </form>
     </div>
   );
