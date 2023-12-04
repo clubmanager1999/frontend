@@ -1,30 +1,19 @@
 import { useEffect, useState } from 'react';
 import { MemberDto } from '../data/member';
 import {
+  Button,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   Stack,
-  TextField,
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { MembershipDto } from '../data/membership';
 import { useApiClient } from '../api/ApiClientContext';
-
-function textInput(label: string, value?: string) {
-  return (
-    <TextField
-      type="text"
-      variant="outlined"
-      color="secondary"
-      label={label}
-      value={value ?? ''}
-      required
-      sx={{ mb: 4, width: '200px' }}
-    />
-  );
-}
+import { AddressDto } from '../data/address';
+import { textInput } from '../utils/textInput';
+import { useNavigate } from 'react-router-dom';
 
 export default function MemberDetail() {
   const [member, setMember] = useState(null as MemberDto | null);
@@ -33,13 +22,10 @@ export default function MemberDetail() {
   );
   const { id } = useParams();
   const api = useApiClient();
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchData() {
-      if (!id) {
-        return;
-      }
-
       const membershipsResult = await api.fetchMemberships();
 
       if (membershipsResult.error) {
@@ -52,6 +38,10 @@ export default function MemberDetail() {
       }
 
       setMemberships(membershipsResult.value);
+
+      if (!id) {
+        return;
+      }
 
       const memberResult = await api.fetchMember(id);
 
@@ -70,45 +60,119 @@ export default function MemberDetail() {
     fetchData();
   }, [api, id]);
 
+  function memberTextInput(label: string, key: keyof MemberDto) {
+    return textInput<MemberDto>(label, member, key, (value) => {
+      if (member) {
+        setMember({ ...member, ...{ [key]: value } });
+      }
+    });
+  }
+
+  function addressTextInput(label: string, key: keyof AddressDto) {
+    return textInput<AddressDto>(label, member?.address, key, (value) => {
+      if (member) {
+        const newAddress = { ...member.address, ...{ [key]: value } };
+        setMember({ ...member, ...{ address: newAddress } });
+      }
+    });
+  }
+
+  function findMembership(id: number) {
+    if (memberships) {
+      for (const membership of memberships) {
+        if (membership.id == id) {
+          return membership;
+        }
+      }
+    }
+  }
+
+  function setMembership(id: number) {
+    if (member) {
+      const newMembership = findMembership(id);
+
+      if (newMembership) {
+        setMember({ ...member, ...{ membership: newMembership } });
+      }
+    }
+  }
+
+  function memberShipInput() {
+    if (memberships) {
+      return (
+        <FormControl>
+          <InputLabel id="demo-simple-select-label">Membership</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={member?.membership.id ?? memberships[0].id}
+            label="Membership"
+            onChange={(e) => setMembership(e.target.value as number)}
+            sx={{ mb: 4, width: '200px' }}
+          >
+            {memberships?.map((m) => (
+              <MenuItem key={m.id} value={m.id}>
+                {m.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      );
+    } else {
+      return (
+        <FormControl>
+          <InputLabel id="demo-simple-select-label">Membership</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={0}
+            label="Membership"
+            sx={{ mb: 4, width: '200px' }}
+          >
+            <MenuItem value={0}>Loading...</MenuItem>
+          </Select>
+        </FormControl>
+      );
+    }
+  }
+
+  async function update() {
+    if (id && member) {
+      const result = await api.updateMember(id, member);
+
+      if (result.status == 204) {
+        navigate('/members');
+      }
+    }
+  }
+
   return (
     <div>
       <form>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {textInput('First Name', member?.firstName)}
-            {textInput('Last Name', member?.lastName)}
+            {memberTextInput('First Name', 'firstName')}
+            {memberTextInput('Last Name', 'lastName')}
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {textInput('Username', member?.userName)}
-            {textInput('Email', member?.email)}
+            {memberTextInput('Username', 'userName')}
+            {memberTextInput('Email', 'email')}
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {textInput('Street', member?.address.street)}
-            {textInput('Streetnumber', member?.address.streetNumber)}
+            {addressTextInput('Street', 'street')}
+            {addressTextInput('Streetnumber', 'streetNumber')}
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {textInput('City', member?.address.city)}
-            {textInput('Zip', member?.address.zip)}
+            {addressTextInput('City', 'city')}
+            {addressTextInput('Zip', 'zip')}
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            <FormControl>
-              <InputLabel id="demo-simple-select-label">Membership</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={member?.membership.id ?? 0}
-                label="Membership"
-                sx={{ mb: 4, width: '200px' }}
-              >
-                {memberships?.map((m) => (
-                  <MenuItem key={m.id} value={m.id}>
-                    {m.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            {memberShipInput()}
           </Stack>
         </Stack>
+        <Button variant="contained" onClick={() => update()}>
+          Save
+        </Button>
       </form>
     </div>
   );
