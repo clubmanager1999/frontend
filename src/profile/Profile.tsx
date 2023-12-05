@@ -4,9 +4,13 @@ import { ProfileDto } from '../data/profile';
 import { useApiClient } from '../api/ApiClientContext';
 import { AddressDto } from '../data/address';
 import { textInput } from '../utils/textInput';
+import { unrapNestedFields } from '../utils/unrapNestedFields';
 
 function Profile() {
   const [profile, setProfile] = useState(null as ProfileDto | null);
+  const [validationErrors, setValidationErrors] = useState(
+    {} as Record<keyof ProfileDto, string>,
+  );
   const api = useApiClient();
 
   useEffect(() => {
@@ -29,25 +33,43 @@ function Profile() {
   }, [api]);
 
   function profileTextInput(label: string, key: keyof ProfileDto) {
-    return textInput<ProfileDto>(label, profile, key, (value) => {
-      if (profile) {
-        setProfile({ ...profile, ...{ [key]: value } });
-      }
-    });
+    return textInput<ProfileDto>(
+      label,
+      profile,
+      validationErrors,
+      key,
+      (value) => {
+        if (profile) {
+          setProfile({ ...profile, ...{ [key]: value } });
+        }
+      },
+    );
   }
 
   function addressTextInput(label: string, key: keyof AddressDto) {
-    return textInput<AddressDto>(label, profile?.address, key, (value) => {
-      if (profile) {
-        const newAddress = { ...profile.address, ...{ [key]: value } };
-        setProfile({ ...profile, ...{ address: newAddress } });
-      }
-    });
+    const errors = unrapNestedFields(validationErrors, 'address.');
+
+    return textInput<AddressDto>(
+      label,
+      profile?.address,
+      errors,
+      key,
+      (value) => {
+        if (profile) {
+          const newAddress = { ...profile.address, ...{ [key]: value } };
+          setProfile({ ...profile, ...{ address: newAddress } });
+        }
+      },
+    );
   }
 
-  function update() {
+  async function update() {
     if (profile) {
-      api.updateProfile(profile);
+      const result = await api.updateProfile(profile);
+
+      if (result?.error?.fields) {
+        setValidationErrors(result.error.fields);
+      }
     }
   }
 

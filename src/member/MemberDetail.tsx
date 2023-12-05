@@ -14,6 +14,7 @@ import { useApiClient } from '../api/ApiClientContext';
 import { AddressDto } from '../data/address';
 import { textInput } from '../utils/textInput';
 import { useNavigate } from 'react-router-dom';
+import { unrapNestedFields } from '../utils/unrapNestedFields';
 
 export default function MemberDetail() {
   const defaultMember: MemberDto = {
@@ -38,6 +39,9 @@ export default function MemberDetail() {
   const [member, setMember] = useState(defaultMember);
   const [memberships, setMemberships] = useState(
     null as MembershipDto[] | null,
+  );
+  const [validationErrors, setValidationErrors] = useState(
+    {} as Record<keyof MemberDto, string>,
   );
   const { id } = useParams();
   const api = useApiClient();
@@ -90,20 +94,34 @@ export default function MemberDetail() {
   }, [api, id]);
 
   function memberTextInput(label: string, key: keyof MemberDto) {
-    return textInput<MemberDto>(label, member, key, (value) => {
-      if (member) {
-        setMember({ ...member, ...{ [key]: value } });
-      }
-    });
+    return textInput<MemberDto>(
+      label,
+      member,
+      validationErrors,
+      key,
+      (value) => {
+        if (member) {
+          setMember({ ...member, ...{ [key]: value } });
+        }
+      },
+    );
   }
 
   function addressTextInput(label: string, key: keyof AddressDto) {
-    return textInput<AddressDto>(label, member?.address, key, (value) => {
-      if (member) {
-        const newAddress = { ...member.address, ...{ [key]: value } };
-        setMember({ ...member, ...{ address: newAddress } });
-      }
-    });
+    const errors = unrapNestedFields(validationErrors, 'address.');
+
+    return textInput<AddressDto>(
+      label,
+      member?.address,
+      errors,
+      key,
+      (value) => {
+        if (member) {
+          const newAddress = { ...member.address, ...{ [key]: value } };
+          setMember({ ...member, ...{ address: newAddress } });
+        }
+      },
+    );
   }
 
   function findMembership(id: number) {
@@ -170,11 +188,25 @@ export default function MemberDetail() {
       if (id == 'new' && member.membership.id) {
         const result = await api.createMember(member);
 
+        setValidationErrors({} as Record<keyof MemberDto, string>);
+
+        if (result.error) {
+          setValidationErrors(result.error.fields);
+          return;
+        }
+
         if (result.status == 201) {
           navigate('/members');
         }
       } else {
         const result = await api.updateMember(id, member);
+
+        setValidationErrors({} as Record<keyof MemberDto, string>);
+
+        if (result.error) {
+          setValidationErrors(result.error.fields);
+          return;
+        }
 
         if (result.status == 204) {
           navigate('/members');
