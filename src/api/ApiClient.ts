@@ -20,6 +20,12 @@ export class ApiClient {
     return fetchData(`/api/members/${id}`, this.accessToken);
   }
 
+  public async createMember(
+    member: MemberDto,
+  ): Promise<Result<MemberDto, ApiError>> {
+    return postData('/api/members', this.accessToken, member);
+  }
+
   public async updateMember(
     id: string,
     member: MemberDto,
@@ -41,6 +47,24 @@ async function fetchData<T, E>(
   accessToken: string,
 ): Promise<Result<T, E>> {
   return exec(path, accessToken);
+}
+
+async function postData<T, E>(
+  path: string,
+  accessToken: string,
+  body: T,
+): Promise<Result<T, E>> {
+  return exec(
+    path,
+    accessToken,
+    {
+      method: 'POST',
+      body: JSON.stringify(body),
+    },
+    {
+      'Content-Type': 'application/json',
+    },
+  );
 }
 
 async function putData<T, E>(
