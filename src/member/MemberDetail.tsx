@@ -16,7 +16,26 @@ import { textInput } from '../utils/textInput';
 import { useNavigate } from 'react-router-dom';
 
 export default function MemberDetail() {
-  const [member, setMember] = useState(null as MemberDto | null);
+  const defaultMember: MemberDto = {
+    id: 0,
+    userName: '',
+    firstName: '',
+    lastName: '',
+    email: '',
+    address: {
+      street: '',
+      streetNumber: '',
+      zip: '',
+      city: '',
+    },
+    membership: {
+      id: null as unknown as number,
+      name: '',
+      fee: 0,
+    },
+  };
+
+  const [member, setMember] = useState(defaultMember);
   const [memberships, setMemberships] = useState(
     null as MembershipDto[] | null,
   );
@@ -38,6 +57,16 @@ export default function MemberDetail() {
       }
 
       setMemberships(membershipsResult.value);
+
+      const memberships = membershipsResult.value;
+
+      if (id == 'new' && memberships.length > 0) {
+        setMember((member) => ({
+          ...member,
+          ...{ membership: memberships[0] },
+        }));
+        return;
+      }
 
       if (!id) {
         return;
@@ -136,12 +165,20 @@ export default function MemberDetail() {
     }
   }
 
-  async function update() {
+  async function save() {
     if (id && member) {
-      const result = await api.updateMember(id, member);
+      if (id == 'new' && member.membership.id) {
+        const result = await api.createMember(member);
 
-      if (result.status == 204) {
-        navigate('/members');
+        if (result.status == 201) {
+          navigate('/members');
+        }
+      } else {
+        const result = await api.updateMember(id, member);
+
+        if (result.status == 204) {
+          navigate('/members');
+        }
       }
     }
   }
@@ -170,7 +207,7 @@ export default function MemberDetail() {
             {memberShipInput()}
           </Stack>
         </Stack>
-        <Button variant="contained" onClick={() => update()}>
+        <Button variant="contained" onClick={() => save()}>
           Save
         </Button>
       </form>
