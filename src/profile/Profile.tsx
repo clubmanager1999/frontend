@@ -15,7 +15,7 @@ function Profile() {
 
   useEffect(() => {
     async function fetchData() {
-      const profileResult = await api.fetchProfile();
+      const profileResult = await api.profile.get();
 
       if (profileResult.error) {
         console.log(profileResult.error);
@@ -65,7 +65,7 @@ function Profile() {
 
   async function update() {
     if (profile) {
-      const result = await api.updateProfile(profile);
+      const result = await api.profile.update(profile);
 
       if (result?.error?.fields) {
         setValidationErrors(result.error.fields);
