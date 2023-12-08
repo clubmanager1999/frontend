@@ -31,6 +31,12 @@ export class HttpClient {
     );
   }
 
+  async delete<E>(path: string): Promise<Result<void, E>> {
+    return this.fetch(path, {
+      method: 'Delete',
+    });
+  }
+
   async fetch<T, E>(
     path: string,
     init?: RequestInit,
