@@ -22,4 +22,8 @@ export class CrudClient<T> {
   public async update(id: string, t: T): Promise<Result<T, ApiError>> {
     return this.httpClient.put(`${this.path}/${id}`, t);
   }
+
+  public async delete(id: string): Promise<Result<void, ApiError>> {
+    return this.httpClient.delete(`${this.path}/${id}`);
+  }
 }

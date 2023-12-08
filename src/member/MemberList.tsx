@@ -12,10 +12,13 @@ import {
 } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import { useApiClient } from '../api/ApiClientContext';
+import AlertDialog from '../dialog/Dialog';
 
 export default function MemberList() {
   const api = useApiClient();
   const [members, setMembers] = useState(null as MemberDto[] | null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [toDelete, setToDelete] = useState(null as MemberDto | null);
 
   useEffect(() => {
     async function fetchData() {
@@ -31,7 +34,19 @@ export default function MemberList() {
     }
 
     fetchData();
-  }, [api]);
+  }, [api, dialogOpen]);
+
+  async function deleteMember() {
+    if (toDelete) {
+      try {
+        await api.members.delete(toDelete?.id.toString());
+      } catch (e) {
+        console.log(`Failed to delete member: ${e}`);
+      }
+    }
+
+    setDialogOpen(false);
+  }
 
   return (
     <div>
@@ -67,6 +82,16 @@ export default function MemberList() {
                   <NavLink to={`/members/${member.id}`}>
                     <Button variant="contained">Edit</Button>
                   </NavLink>
+                  <Button
+                    variant="contained"
+                    sx={{ marginLeft: '5px' }}
+                    onClick={() => {
+                      setToDelete(member);
+                      setDialogOpen(true);
+                    }}
+                  >
+                    Delete
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -78,6 +103,19 @@ export default function MemberList() {
           Add
         </Button>
       </NavLink>
+      <AlertDialog
+        open={dialogOpen}
+        title="Delete member"
+        text={`Are you sure you want to delete ${toDelete?.firstName} ${toDelete?.lastName}`}
+        onClose={() => {
+          setDialogOpen(false);
+          setToDelete(null);
+        }}
+        onConfirm={() => deleteMember()}
+        onAbort={() => {
+          setDialogOpen(false);
+        }}
+      />
     </div>
   );
 }
