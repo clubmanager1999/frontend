@@ -49,7 +49,7 @@ export default function MemberDetail() {
 
   useEffect(() => {
     async function fetchData() {
-      const membershipsResult = await api.fetchMemberships();
+      const membershipsResult = await api.memberships.getAll();
 
       if (membershipsResult.error) {
         console.log(membershipsResult.error);
@@ -76,7 +76,7 @@ export default function MemberDetail() {
         return;
       }
 
-      const memberResult = await api.fetchMember(id);
+      const memberResult = await api.members.getById(id);
 
       if (memberResult.error) {
         console.log(memberResult.error);
@@ -186,7 +186,7 @@ export default function MemberDetail() {
   async function save() {
     if (id && member) {
       if (id == 'new' && member.membership.id) {
-        const result = await api.createMember(member);
+        const result = await api.members.create(member);
 
         setValidationErrors({} as Record<keyof MemberDto, string>);
 
@@ -199,7 +199,7 @@ export default function MemberDetail() {
           navigate('/members');
         }
       } else {
-        const result = await api.updateMember(id, member);
+        const result = await api.members.update(id, member);
 
         setValidationErrors({} as Record<keyof MemberDto, string>);
 

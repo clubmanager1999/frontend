@@ -19,7 +19,7 @@ export default function MemberList() {
 
   useEffect(() => {
     async function fetchData() {
-      const result = await api.fetchMembers();
+      const result = await api.members.getAll();
 
       if (result.value) {
         setMembers(result.value);
