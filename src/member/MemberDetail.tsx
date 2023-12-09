@@ -155,7 +155,7 @@ export default function MemberDetail() {
             value={member?.membership.id ?? memberships[0].id}
             label="Membership"
             onChange={(e) => setMembership(e.target.value as number)}
-            sx={{ mb: 4, width: '200px' }}
+            sx={{ width: '200px' }}
           >
             {memberships?.map((m) => (
               <MenuItem key={m.id} value={m.id}>
@@ -174,7 +174,7 @@ export default function MemberDetail() {
             id="demo-simple-select"
             value={0}
             label="Membership"
-            sx={{ mb: 4, width: '200px' }}
+            sx={{ width: '200px' }}
           >
             <MenuItem value={0}>Loading...</MenuItem>
           </Select>
@@ -239,7 +239,11 @@ export default function MemberDetail() {
             {memberShipInput()}
           </Stack>
         </Stack>
-        <Button variant="contained" onClick={() => save()}>
+        <Button
+          sx={{ marginTop: 2 }}
+          variant="contained"
+          onClick={() => save()}
+        >
           Save
         </Button>
       </form>
