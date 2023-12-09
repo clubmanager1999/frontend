@@ -108,7 +108,7 @@ export default function DataTable<T extends Data>(props: DataTableProps<T>) {
         </Table>
       </TableContainer>
       <NavLink to={`${props.path}/new`}>
-        <Button sx={{ marginTop: '12px' }} variant="contained">
+        <Button sx={{ marginTop: 2 }} variant="contained">
           Add
         </Button>
       </NavLink>

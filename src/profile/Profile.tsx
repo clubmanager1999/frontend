@@ -94,7 +94,11 @@ function Profile() {
             {addressTextInput('Zip', 'zip')}
           </Stack>
         </Stack>
-        <Button variant="contained" onClick={() => update()}>
+        <Button
+          sx={{ marginTop: 2 }}
+          variant="contained"
+          onClick={() => update()}
+        >
           Save
         </Button>
       </form>
