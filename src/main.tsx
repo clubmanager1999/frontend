@@ -10,6 +10,8 @@ import MemberList from './member/MemberList.tsx';
 import MemberDetail from './member/MemberDetail.tsx';
 import ApiClientProvider from './api/ApiClientProvider.tsx';
 import Auth from './auth/Auth.tsx';
+import MembershipList from './membership/MembershipList.tsx';
+import MembershipDetail from './membership/MemberShipDetail.tsx';
 
 const config = {
   authority: import.meta.env.VITE_OIDC_AUTHORITY,
@@ -29,6 +31,14 @@ const router = createBrowserRouter([
       {
         path: '/profile',
         element: <Profile />,
+      },
+      {
+        path: '/memberships',
+        element: <MembershipList />,
+      },
+      {
+        path: '/memberships/:id',
+        element: <MembershipDetail />,
       },
       {
         path: '/members',

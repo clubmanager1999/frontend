@@ -14,10 +14,11 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PeopleIcon from '@mui/icons-material/People';
+import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Outlet, NavLink } from 'react-router-dom';
-const drawerWidth = 180;
+const drawerWidth = 190;
 
 function navLink(name: string, path: string, icon: JSX.Element) {
   return (
@@ -88,6 +89,7 @@ function App() {
             >
               {navLink('Home', '/', <HomeIcon />)}
               {navLink('Profile', '/profile', <SettingsIcon />)}
+              {navLink('Memberships', '/memberships', <CardMembershipIcon />)}
               {navLink('Members', '/members', <PeopleIcon />)}
 
               <Box sx={{ marginTop: 'auto' }}>
