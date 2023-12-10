@@ -39,6 +39,16 @@ export default function DataTable<T extends Data>(props: DataTableProps<T>) {
       const result = await props.client.getAll();
 
       if (result.value) {
+        result.value.sort(function (a, b) {
+          if (a.id < b.id) {
+            return -1;
+          }
+          if (a.id > b.id) {
+            return 1;
+          }
+          return 0;
+        });
+
         setDataObjects(result.value);
       }
 
