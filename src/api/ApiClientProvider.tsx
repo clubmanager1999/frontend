@@ -7,6 +7,7 @@ import { HttpClient } from './HttpClient';
 import { CrudClient } from './CrudClient';
 import { MemberDto } from '../data/member';
 import { MembershipDto } from '../data/membership';
+import { CreditorDto } from '../data/creditor';
 
 interface ApiClientProviderProps {
   children?: ReactNode;
@@ -26,6 +27,7 @@ export default function ApiClientProvider(props: ApiClientProviderProps) {
     profile: new ProfileClient(httpClient),
     members: new CrudClient<MemberDto>(httpClient, '/api/members'),
     memberships: new CrudClient<MembershipDto>(httpClient, '/api/memberships'),
+    creditors: new CrudClient<CreditorDto>(httpClient, '/api/creditors'),
   };
 
   return (
