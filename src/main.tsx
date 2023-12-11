@@ -12,6 +12,8 @@ import ApiClientProvider from './api/ApiClientProvider.tsx';
 import Auth from './auth/Auth.tsx';
 import MembershipList from './membership/MembershipList.tsx';
 import MembershipDetail from './membership/MemberShipDetail.tsx';
+import CreditorList from './creditor/CreditorList.tsx';
+import CreditorDetail from './creditor/CreditorDetail.tsx';
 
 const config = {
   authority: import.meta.env.VITE_OIDC_AUTHORITY,
@@ -47,6 +49,14 @@ const router = createBrowserRouter([
       {
         path: '/members/:id',
         element: <MemberDetail />,
+      },
+      {
+        path: '/creditors',
+        element: <CreditorList />,
+      },
+      {
+        path: '/creditors/:id',
+        element: <CreditorDetail />,
       },
     ],
   },
