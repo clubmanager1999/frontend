@@ -92,6 +92,7 @@ function App() {
               {navLink('Memberships', '/memberships', <CardMembershipIcon />)}
               {navLink('Members', '/members', <PeopleIcon />)}
               {navLink('Creditors', '/creditors', <PeopleIcon />)}
+              {navLink('Donors', '/donors', <PeopleIcon />)}
 
               <Box sx={{ marginTop: 'auto' }}>
                 {navCallback(

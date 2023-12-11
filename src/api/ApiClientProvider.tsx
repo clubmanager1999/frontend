@@ -8,6 +8,7 @@ import { CrudClient } from './CrudClient';
 import { MemberDto } from '../data/member';
 import { MembershipDto } from '../data/membership';
 import { CreditorDto } from '../data/creditor';
+import { DonorDto } from '../data/donor';
 
 interface ApiClientProviderProps {
   children?: ReactNode;
@@ -28,6 +29,7 @@ export default function ApiClientProvider(props: ApiClientProviderProps) {
     members: new CrudClient<MemberDto>(httpClient, '/api/members'),
     memberships: new CrudClient<MembershipDto>(httpClient, '/api/memberships'),
     creditors: new CrudClient<CreditorDto>(httpClient, '/api/creditors'),
+    donors: new CrudClient<DonorDto>(httpClient, '/api/donors'),
   };
 
   return (

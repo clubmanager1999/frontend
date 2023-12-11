@@ -14,6 +14,8 @@ import MembershipList from './membership/MembershipList.tsx';
 import MembershipDetail from './membership/MemberShipDetail.tsx';
 import CreditorList from './creditor/CreditorList.tsx';
 import CreditorDetail from './creditor/CreditorDetail.tsx';
+import DonorDetail from './donor/DonorDetail.tsx';
+import DonorList from './donor/DonorList.tsx';
 
 const config = {
   authority: import.meta.env.VITE_OIDC_AUTHORITY,
@@ -57,6 +59,14 @@ const router = createBrowserRouter([
       {
         path: '/creditors/:id',
         element: <CreditorDetail />,
+      },
+      {
+        path: '/donors',
+        element: <DonorList />,
+      },
+      {
+        path: '/donors/:id',
+        element: <DonorDetail />,
       },
     ],
   },
