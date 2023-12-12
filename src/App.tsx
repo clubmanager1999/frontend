@@ -11,18 +11,15 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import LogoutIcon from '@mui/icons-material/Logout';
-import HomeIcon from '@mui/icons-material/Home';
-import SettingsIcon from '@mui/icons-material/Settings';
-import PeopleIcon from '@mui/icons-material/People';
-import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Outlet, NavLink } from 'react-router-dom';
+import { routes } from './routes';
 const drawerWidth = 190;
 
 function navLink(name: string, path: string, icon: JSX.Element) {
   return (
-    <ListItem disablePadding>
+    <ListItem disablePadding key={path}>
       <ListItemButton component={NavLink} to={path}>
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText className="app-drawer-active" primary={name} />
@@ -87,12 +84,15 @@ function App() {
                 height: '100%',
               }}
             >
-              {navLink('Home', '/', <HomeIcon />)}
-              {navLink('Profile', '/profile', <SettingsIcon />)}
-              {navLink('Memberships', '/memberships', <CardMembershipIcon />)}
-              {navLink('Members', '/members', <PeopleIcon />)}
-              {navLink('Creditors', '/creditors', <PeopleIcon />)}
-              {navLink('Donors', '/donors', <PeopleIcon />)}
+              {routes.map((route) => {
+                if (route.path && route.navEntry) {
+                  return navLink(
+                    route.navEntry.title,
+                    route.path,
+                    route.navEntry.icon,
+                  );
+                }
+              })}
 
               <Box sx={{ marginTop: 'auto' }}>
                 {navCallback(
