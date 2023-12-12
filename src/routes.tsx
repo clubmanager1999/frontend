@@ -13,6 +13,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PeopleIcon from '@mui/icons-material/People';
 import CardMembershipIcon from '@mui/icons-material/CardMembership';
+import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 
 export const routes: Route[] = [
   {
@@ -46,7 +48,7 @@ export const routes: Route[] = [
   {
     path: '/creditors',
     element: <CreditorList />,
-    navEntry: { title: 'Creditors', icon: <PeopleIcon /> },
+    navEntry: { title: 'Creditors', icon: <RequestQuoteIcon /> },
   },
   {
     path: '/creditors/:id',
@@ -55,7 +57,7 @@ export const routes: Route[] = [
   {
     path: '/donors',
     element: <DonorList />,
-    navEntry: { title: 'Donors', icon: <PeopleIcon /> },
+    navEntry: { title: 'Donors', icon: <VolunteerActivismIcon /> },
   },
   {
     path: '/donors/:id',
