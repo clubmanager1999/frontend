@@ -15,6 +15,9 @@ import PeopleIcon from '@mui/icons-material/People';
 import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+import DomainIcon from '@mui/icons-material/Domain';
+import AreaList from './area/AreaList';
+import AreaDetail from './area/AreaDetail';
 
 export const routes: Route[] = [
   {
@@ -62,6 +65,15 @@ export const routes: Route[] = [
   {
     path: '/donors/:id',
     element: <DonorDetail />,
+  },
+  {
+    path: '/areas',
+    element: <AreaList />,
+    navEntry: { title: 'Areas', icon: <DomainIcon /> },
+  },
+  {
+    path: '/areas/:id',
+    element: <AreaDetail />,
   },
 ];
 
