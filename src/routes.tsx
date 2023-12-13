@@ -18,6 +18,9 @@ import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import DomainIcon from '@mui/icons-material/Domain';
 import AreaList from './area/AreaList';
 import AreaDetail from './area/AreaDetail';
+import PurposeList from './purpose/PurposeList';
+import PurposeDetail from './purpose/PurposeDetail';
+import FlagIcon from '@mui/icons-material/Flag';
 
 export const routes: Route[] = [
   {
@@ -74,6 +77,15 @@ export const routes: Route[] = [
   {
     path: '/areas/:id',
     element: <AreaDetail />,
+  },
+  {
+    path: '/purposes',
+    element: <PurposeList />,
+    navEntry: { title: 'Purposes', icon: <FlagIcon /> },
+  },
+  {
+    path: '/purposes/:id',
+    element: <PurposeDetail />,
   },
 ];
 
