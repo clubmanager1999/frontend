@@ -3,6 +3,7 @@ import { CreditorDto } from '../data/creditor';
 import { DonorDto } from '../data/donor';
 import { MemberDto } from '../data/member';
 import { MembershipDto } from '../data/membership';
+import { PurposeDto } from '../data/purpose';
 import { CrudClient } from './CrudClient';
 import { ProfileClient } from './ProfileClient';
 
@@ -13,4 +14,5 @@ export interface ApiClient {
   creditors: CrudClient<CreditorDto>;
   donors: CrudClient<DonorDto>;
   areas: CrudClient<AreaDto>;
+  purposes: CrudClient<PurposeDto>;
 }
