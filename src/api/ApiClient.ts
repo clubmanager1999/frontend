@@ -1,3 +1,4 @@
+import { AreaDto } from '../data/area';
 import { CreditorDto } from '../data/creditor';
 import { DonorDto } from '../data/donor';
 import { MemberDto } from '../data/member';
@@ -11,4 +12,5 @@ export interface ApiClient {
   memberships: CrudClient<MembershipDto>;
   creditors: CrudClient<CreditorDto>;
   donors: CrudClient<DonorDto>;
+  areas: CrudClient<AreaDto>;
 }
