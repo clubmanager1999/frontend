@@ -21,6 +21,9 @@ import AreaDetail from './area/AreaDetail';
 import PurposeList from './purpose/PurposeList';
 import PurposeDetail from './purpose/PurposeDetail';
 import FlagIcon from '@mui/icons-material/Flag';
+import MappingList from './mapping/MappingList';
+import MappingDetail from './mapping/MappingDetail';
+import MoveDownIcon from '@mui/icons-material/MoveDown';
 
 export const routes: Route[] = [
   {
@@ -86,6 +89,15 @@ export const routes: Route[] = [
   {
     path: '/purposes/:id',
     element: <PurposeDetail />,
+  },
+  {
+    path: '/mappings',
+    element: <MappingList />,
+    navEntry: { title: 'Mappings', icon: <MoveDownIcon /> },
+  },
+  {
+    path: '/mappings/:id',
+    element: <MappingDetail />,
   },
 ];
 
