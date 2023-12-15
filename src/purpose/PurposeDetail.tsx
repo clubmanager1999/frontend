@@ -3,8 +3,9 @@ import { PurposeDto } from '../data/purpose';
 import { Button, Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useApiClient } from '../api/ApiClientContext';
-import { textInput } from '../utils/textInput';
+import { TextInput } from '../utils/TextInput';
 import { useNavigate } from 'react-router-dom';
+import { useSetField } from '../utils/setField';
 
 export default function PurposeDetail() {
   const defaultPurpose: PurposeDto = {
@@ -19,6 +20,8 @@ export default function PurposeDetail() {
   const { id } = useParams();
   const api = useApiClient();
   const navigate = useNavigate();
+
+  const setField = useSetField(setPurpose);
 
   useEffect(() => {
     async function fetchData() {
@@ -42,20 +45,6 @@ export default function PurposeDetail() {
 
     fetchData();
   }, [api, id]);
-
-  function purposeTextInput(label: string, key: keyof PurposeDto) {
-    return textInput<PurposeDto>(
-      label,
-      purpose,
-      validationErrors,
-      key,
-      (value) => {
-        if (purpose) {
-          setPurpose({ ...purpose, ...{ [key]: value } });
-        }
-      },
-    );
-  }
 
   async function save() {
     if (id) {
@@ -94,7 +83,13 @@ export default function PurposeDetail() {
       <form>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {purposeTextInput('Name', 'name')}
+            <TextInput
+              label="Name"
+              record={purpose}
+              errors={validationErrors}
+              recordKey="name"
+              onChange={(key, value) => setField(key, value)}
+            />
           </Stack>
         </Stack>
         <Button

@@ -3,8 +3,9 @@ import { CreditorDto } from '../data/creditor';
 import { Button, Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useApiClient } from '../api/ApiClientContext';
-import { textInput } from '../utils/textInput';
+import { TextInput } from '../utils/TextInput';
 import { useNavigate } from 'react-router-dom';
+import { useSetField } from '../utils/setField';
 
 export default function CreditorDetail() {
   const defaultCreditor: CreditorDto = {
@@ -19,6 +20,8 @@ export default function CreditorDetail() {
   const { id } = useParams();
   const api = useApiClient();
   const navigate = useNavigate();
+
+  const setField = useSetField(setCreditor);
 
   useEffect(() => {
     async function fetchData() {
@@ -42,20 +45,6 @@ export default function CreditorDetail() {
 
     fetchData();
   }, [api, id]);
-
-  function creditorTextInput(label: string, key: keyof CreditorDto) {
-    return textInput<CreditorDto>(
-      label,
-      creditor,
-      validationErrors,
-      key,
-      (value) => {
-        if (creditor) {
-          setCreditor({ ...creditor, ...{ [key]: value } });
-        }
-      },
-    );
-  }
 
   async function save() {
     if (id) {
@@ -94,7 +83,13 @@ export default function CreditorDetail() {
       <form>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {creditorTextInput('Name', 'name')}
+            <TextInput
+              label="Name"
+              record={creditor}
+              errors={validationErrors}
+              recordKey="name"
+              onChange={(key, value) => setField(key, value)}
+            />
           </Stack>
         </Stack>
         <Button

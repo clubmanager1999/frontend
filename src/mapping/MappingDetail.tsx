@@ -3,7 +3,6 @@ import { MappingDto } from '../data/mapping';
 import { Button, Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useApiClient } from '../api/ApiClientContext';
-import { textInput } from '../utils/textInput';
 import { useNavigate } from 'react-router-dom';
 import { ReferenceDto } from '../data/reference';
 import { Result } from '../api/HttpClient';
@@ -15,6 +14,8 @@ import { AreaDto } from '../data/area';
 import SelectInput from './SelectInput';
 import ReferenceInput from './ReferenceInput';
 import ReferenceTypeInput from './ReferenceTypeInput';
+import { TextInput } from '../utils/TextInput';
+import { useSetField } from '../utils/setField';
 
 interface Options {
   creditors: CreditorDto[];
@@ -56,6 +57,8 @@ export default function MappingDetail() {
   const api = useApiClient();
   const navigate = useNavigate();
 
+  const setField = useSetField(setMapping);
+
   useEffect(() => {
     async function fetchData() {
       const creditors = unwrap(await api.creditors.getAll()) ?? [];
@@ -92,20 +95,6 @@ export default function MappingDetail() {
 
     fetchData();
   }, [api, id]);
-
-  function mappingTextInput(label: string, key: keyof MappingDto) {
-    return textInput<MappingDto>(
-      label,
-      mapping,
-      validationErrors,
-      key,
-      (value) => {
-        if (mapping) {
-          setMapping({ ...mapping, ...{ [key]: value } });
-        }
-      },
-    );
-  }
 
   async function save() {
     if (id && mapping) {
@@ -212,7 +201,13 @@ export default function MappingDetail() {
       <form>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {mappingTextInput('Matcher', 'matcher')}
+            <TextInput
+              label="Matcher"
+              record={mapping}
+              errors={validationErrors}
+              recordKey="matcher"
+              onChange={(key, value) => setField(key, value)}
+            />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <SelectInput

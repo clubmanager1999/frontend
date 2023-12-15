@@ -4,9 +4,10 @@ import { Button, Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useApiClient } from '../api/ApiClientContext';
 import { AddressDto } from '../data/address';
-import { textInput } from '../utils/textInput';
+import { TextInput } from '../utils/TextInput';
 import { useNavigate } from 'react-router-dom';
 import { unrapNestedFields } from '../utils/unrapNestedFields';
+import { useSetField } from '../utils/setField';
 
 export default function DonorDetail() {
   const defaultDonor: DonorDto = {
@@ -28,6 +29,14 @@ export default function DonorDetail() {
   const { id } = useParams();
   const api = useApiClient();
   const navigate = useNavigate();
+
+  const setField = useSetField(setDonor);
+  const addressErrors = unrapNestedFields(validationErrors, 'address.');
+
+  function setAddressField(key: keyof AddressDto, value: string) {
+    const newAddress = { ...donor.address, ...{ [key]: value } };
+    setField('address', newAddress);
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -51,31 +60,6 @@ export default function DonorDetail() {
 
     fetchData();
   }, [api, id]);
-
-  function donorTextInput(label: string, key: keyof DonorDto) {
-    return textInput<DonorDto>(label, donor, validationErrors, key, (value) => {
-      if (donor) {
-        setDonor({ ...donor, ...{ [key]: value } });
-      }
-    });
-  }
-
-  function addressTextInput(label: string, key: keyof AddressDto) {
-    const errors = unrapNestedFields(validationErrors, 'address.');
-
-    return textInput<AddressDto>(
-      label,
-      donor?.address,
-      errors,
-      key,
-      (value) => {
-        if (donor) {
-          const newAddress = { ...donor.address, ...{ [key]: value } };
-          setDonor({ ...donor, ...{ address: newAddress } });
-        }
-      },
-    );
-  }
 
   async function save() {
     if (id && donor) {
@@ -114,16 +98,52 @@ export default function DonorDetail() {
       <form>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {donorTextInput('First Name', 'firstName')}
-            {donorTextInput('Last Name', 'lastName')}
+            <TextInput
+              label="First Name"
+              record={donor}
+              errors={validationErrors}
+              recordKey="firstName"
+              onChange={(key, value) => setField(key, value)}
+            />
+            <TextInput
+              label="Last Name"
+              record={donor}
+              errors={validationErrors}
+              recordKey="lastName"
+              onChange={(key, value) => setField(key, value)}
+            />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {addressTextInput('Street', 'street')}
-            {addressTextInput('Streetnumber', 'streetNumber')}
+            <TextInput
+              label="Street"
+              record={donor.address}
+              errors={addressErrors}
+              recordKey="street"
+              onChange={(key, value) => setAddressField(key, value)}
+            />
+            <TextInput
+              label="Streetnumber"
+              record={donor.address}
+              errors={addressErrors}
+              recordKey="streetNumber"
+              onChange={(key, value) => setAddressField(key, value)}
+            />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {addressTextInput('City', 'city')}
-            {addressTextInput('Zip', 'zip')}
+            <TextInput
+              label="City"
+              record={donor.address}
+              errors={addressErrors}
+              recordKey="city"
+              onChange={(key, value) => setAddressField(key, value)}
+            />
+            <TextInput
+              label="Zip"
+              record={donor.address}
+              errors={addressErrors}
+              recordKey="zip"
+              onChange={(key, value) => setAddressField(key, value)}
+            />
           </Stack>
         </Stack>
         <Button

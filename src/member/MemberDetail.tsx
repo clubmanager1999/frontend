@@ -12,9 +12,10 @@ import { useParams } from 'react-router-dom';
 import { MembershipDto } from '../data/membership';
 import { useApiClient } from '../api/ApiClientContext';
 import { AddressDto } from '../data/address';
-import { textInput } from '../utils/textInput';
+import { TextInput } from '../utils/TextInput';
 import { useNavigate } from 'react-router-dom';
 import { unrapNestedFields } from '../utils/unrapNestedFields';
+import { useSetField } from '../utils/setField';
 
 export default function MemberDetail() {
   const defaultMember: MemberDto = {
@@ -46,6 +47,14 @@ export default function MemberDetail() {
   const { id } = useParams();
   const api = useApiClient();
   const navigate = useNavigate();
+
+  const setField = useSetField(setMember);
+  const addressErrors = unrapNestedFields(validationErrors, 'address.');
+
+  function setAddressField(key: keyof AddressDto, value: string) {
+    const newAddress = { ...member.address, ...{ [key]: value } };
+    setField('address', newAddress);
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -92,37 +101,6 @@ export default function MemberDetail() {
 
     fetchData();
   }, [api, id]);
-
-  function memberTextInput(label: string, key: keyof MemberDto) {
-    return textInput<MemberDto>(
-      label,
-      member,
-      validationErrors,
-      key,
-      (value) => {
-        if (member) {
-          setMember({ ...member, ...{ [key]: value } });
-        }
-      },
-    );
-  }
-
-  function addressTextInput(label: string, key: keyof AddressDto) {
-    const errors = unrapNestedFields(validationErrors, 'address.');
-
-    return textInput<AddressDto>(
-      label,
-      member?.address,
-      errors,
-      key,
-      (value) => {
-        if (member) {
-          const newAddress = { ...member.address, ...{ [key]: value } };
-          setMember({ ...member, ...{ address: newAddress } });
-        }
-      },
-    );
-  }
 
   function findMembership(id: number) {
     if (memberships) {
@@ -220,20 +198,68 @@ export default function MemberDetail() {
       <form>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {memberTextInput('First Name', 'firstName')}
-            {memberTextInput('Last Name', 'lastName')}
+            <TextInput
+              label="First Name"
+              record={member}
+              errors={validationErrors}
+              recordKey="firstName"
+              onChange={(key, value) => setField(key, value)}
+            />
+            <TextInput
+              label="Last Name"
+              record={member}
+              errors={validationErrors}
+              recordKey="lastName"
+              onChange={(key, value) => setField(key, value)}
+            />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {memberTextInput('Username', 'userName')}
-            {memberTextInput('Email', 'email')}
+            <TextInput
+              label="Username"
+              record={member}
+              errors={validationErrors}
+              recordKey="userName"
+              onChange={(key, value) => setField(key, value)}
+            />
+            <TextInput
+              label="Email"
+              record={member}
+              errors={validationErrors}
+              recordKey="email"
+              onChange={(key, value) => setField(key, value)}
+            />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {addressTextInput('Street', 'street')}
-            {addressTextInput('Streetnumber', 'streetNumber')}
+            <TextInput
+              label="Street"
+              record={member.address}
+              errors={addressErrors}
+              recordKey="street"
+              onChange={(key, value) => setAddressField(key, value)}
+            />
+            <TextInput
+              label="Streetnumber"
+              record={member.address}
+              errors={addressErrors}
+              recordKey="streetNumber"
+              onChange={(key, value) => setAddressField(key, value)}
+            />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {addressTextInput('City', 'city')}
-            {addressTextInput('Zip', 'zip')}
+            <TextInput
+              label="City"
+              record={member.address}
+              errors={addressErrors}
+              recordKey="city"
+              onChange={(key, value) => setAddressField(key, value)}
+            />
+            <TextInput
+              label="Zip"
+              record={member.address}
+              errors={addressErrors}
+              recordKey="zip"
+              onChange={(key, value) => setAddressField(key, value)}
+            />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             {memberShipInput()}

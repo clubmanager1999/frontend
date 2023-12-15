@@ -3,8 +3,9 @@ import { AreaDto } from '../data/area';
 import { Button, Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useApiClient } from '../api/ApiClientContext';
-import { textInput } from '../utils/textInput';
+import { TextInput } from '../utils/TextInput';
 import { useNavigate } from 'react-router-dom';
+import { useSetField } from '../utils/setField';
 
 export default function AreaDetail() {
   const defaultArea: AreaDto = {
@@ -19,6 +20,8 @@ export default function AreaDetail() {
   const { id } = useParams();
   const api = useApiClient();
   const navigate = useNavigate();
+
+  const setField = useSetField(setArea);
 
   useEffect(() => {
     async function fetchData() {
@@ -42,14 +45,6 @@ export default function AreaDetail() {
 
     fetchData();
   }, [api, id]);
-
-  function areaTextInput(label: string, key: keyof AreaDto) {
-    return textInput<AreaDto>(label, area, validationErrors, key, (value) => {
-      if (area) {
-        setArea({ ...area, ...{ [key]: value } });
-      }
-    });
-  }
 
   async function save() {
     if (id) {
@@ -88,7 +83,13 @@ export default function AreaDetail() {
       <form>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            {areaTextInput('Name', 'name')}
+            <TextInput
+              label="Name"
+              record={area}
+              errors={validationErrors}
+              recordKey="name"
+              onChange={(key, value) => setField(key, value)}
+            />
           </Stack>
         </Stack>
         <Button

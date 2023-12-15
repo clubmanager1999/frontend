@@ -3,8 +3,9 @@ import { MembershipDto } from '../data/membership';
 import { Button, Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useApiClient } from '../api/ApiClientContext';
-import { textInput } from '../utils/textInput';
+import { TextInput } from '../utils/TextInput';
 import { useNavigate } from 'react-router-dom';
+import { useSetField } from '../utils/setField';
 
 export default function MembershipDetail() {
   const defaultMembership: MembershipDto = {
@@ -20,6 +21,8 @@ export default function MembershipDetail() {
   const { id } = useParams();
   const api = useApiClient();
   const navigate = useNavigate();
+
+  const setField = useSetField(setMembership);
 
   useEffect(() => {
     async function fetchData() {
@@ -43,20 +46,6 @@ export default function MembershipDetail() {
 
     fetchData();
   }, [api, id]);
-
-  function membershipTextInput(label: string, key: keyof MembershipDto) {
-    return textInput<MembershipDto>(
-      label,
-      membership,
-      validationErrors,
-      key,
-      (value) => {
-        if (membership) {
-          setMembership({ ...membership, ...{ [key]: value } });
-        }
-      },
-    );
-  }
 
   async function save() {
     if (id && membership) {
@@ -94,8 +83,20 @@ export default function MembershipDetail() {
     <div>
       <form>
         <Stack spacing={2} direction="row">
-          {membershipTextInput('Name', 'name')}
-          {membershipTextInput('Fee', 'fee')}
+          <TextInput
+            label="Name"
+            record={membership}
+            errors={validationErrors}
+            recordKey="name"
+            onChange={(key, value) => setField(key, value)}
+          />
+          <TextInput
+            label="Fee"
+            record={membership}
+            errors={validationErrors}
+            recordKey="fee"
+            onChange={(key, value) => setField(key, value)}
+          />
         </Stack>
         <Button
           variant="contained"
