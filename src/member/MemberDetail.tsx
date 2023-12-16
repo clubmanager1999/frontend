@@ -30,11 +30,6 @@ export default function MemberDetail() {
       zip: '',
       city: '',
     },
-    membership: {
-      id: null as unknown as number,
-      name: '',
-      fee: 0,
-    },
   };
 
   const [member, setMember] = useState(defaultMember);
@@ -71,17 +66,7 @@ export default function MemberDetail() {
 
       setMemberships(membershipsResult.value);
 
-      const memberships = membershipsResult.value;
-
-      if (id == 'new' && memberships.length > 0) {
-        setMember((member) => ({
-          ...member,
-          ...{ membership: memberships[0] },
-        }));
-        return;
-      }
-
-      if (!id) {
+      if (!id || id == 'new') {
         return;
       }
 
@@ -130,7 +115,7 @@ export default function MemberDetail() {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={member?.membership.id ?? memberships[0].id}
+            value={member?.membership?.id ?? ''}
             label="Membership"
             onChange={(e) => setMembership(e.target.value as number)}
             sx={{ width: '200px' }}
@@ -163,7 +148,7 @@ export default function MemberDetail() {
 
   async function save() {
     if (id && member) {
-      if (id == 'new' && member.membership.id) {
+      if (id == 'new') {
         const result = await api.members.create(member);
 
         setValidationErrors({} as Record<keyof MemberDto, string>);

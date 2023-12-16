@@ -13,7 +13,7 @@ export default function MemberList() {
       value: (m) =>
         `${m.address.street} ${m.address.streetNumber} ${m.address.city}`,
     },
-    { title: 'Membership', value: (m) => m.membership.name },
+    { title: 'Membership', value: (m) => m.membership?.name ?? '' },
   ];
 
   return (

@@ -37,7 +37,6 @@ export default function MappingDetail() {
   const defaultMapping: MappingDto = {
     id: 0,
     matcher: '',
-    reference: { type: 'creditor', creditor: { id: 0, name: '' } },
   };
 
   const defaultOptions: Options = {
@@ -227,7 +226,7 @@ export default function MappingDetail() {
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <ReferenceTypeInput
-              type={mapping.reference.type}
+              type={mapping?.reference?.type}
               activeTypes={activeTypes}
               onSelect={(type) => setReferenceType(type)}
             />

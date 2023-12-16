@@ -5,7 +5,7 @@ import { ReferenceDto } from './reference';
 export interface MappingDto {
   id: number;
   matcher: string;
-  reference: ReferenceDto;
+  reference?: ReferenceDto;
   purpose?: PurposeDto;
   area?: AreaDto;
 }

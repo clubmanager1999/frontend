@@ -7,5 +7,5 @@ export interface ProfileDto {
   lastName: string;
   email: string;
   address: AddressDto;
-  membership: MembershipDto;
+  membership?: MembershipDto;
 }

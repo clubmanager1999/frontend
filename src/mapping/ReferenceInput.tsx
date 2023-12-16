@@ -17,19 +17,21 @@ interface ReferenceInputProps {
   onSelect: (reference: ReferenceDto) => void;
 }
 
-function getId(reference: ReferenceDto) {
-  switch (reference.type) {
+function getId(reference?: ReferenceDto) {
+  switch (reference?.type) {
     case 'creditor':
       return reference.creditor.id;
     case 'donor':
       return reference.donor.id;
     case 'member':
       return reference.member.id;
+    default:
+      return null;
   }
 }
 
 function getValues(mapping: MappingDto, options: ReferenceOptions) {
-  switch (mapping.reference.type) {
+  switch (mapping?.reference?.type) {
     case 'creditor':
       return options.creditors.map((x) => ({
         id: x.id,
@@ -48,6 +50,8 @@ function getValues(mapping: MappingDto, options: ReferenceOptions) {
         title: `${x.firstName} ${x.lastName}`,
         value: x,
       }));
+    default:
+      return [];
   }
 }
 
@@ -81,16 +85,16 @@ export default function ReferenceInput(props: ReferenceInputProps) {
       <InputLabel id="reference">Reference</InputLabel>
       <Select
         labelId="reference"
-        value={getId(props.mapping.reference)}
+        value={getId(props.mapping.reference) ?? ''}
         label="Membership"
         onChange={(e) => {
-          props.onSelect(
-            getReference(
-              e.target.value as number,
-              props.mapping.reference.type,
-              props.options,
-            ),
-          );
+          const type = props.mapping.reference?.type;
+
+          if (type) {
+            props.onSelect(
+              getReference(e.target.value as number, type, props.options),
+            );
+          }
         }}
         sx={{ width: '200px' }}
       >
