@@ -30,7 +30,7 @@ export interface DataTableProps<T> {
 }
 
 export default function DataTable<T extends Data>(props: DataTableProps<T>) {
-  const [dataObjects, setDataObjects] = useState(null as T[] | null);
+  const [dataObjects, setDataObjects] = useState([] as T[]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [toDelete, setToDelete] = useState(null as T | null);
 
@@ -87,7 +87,7 @@ export default function DataTable<T extends Data>(props: DataTableProps<T>) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {dataObjects?.map((dataObject) => (
+            {dataObjects.map((dataObject) => (
               <TableRow
                 key={dataObject.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
