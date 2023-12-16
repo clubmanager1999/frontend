@@ -8,5 +8,5 @@ export interface MemberDto {
   lastName: string;
   email: string;
   address: AddressDto;
-  membership: MembershipDto;
+  membership?: MembershipDto;
 }

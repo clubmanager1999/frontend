@@ -8,7 +8,7 @@ import {
 import { ReferenceDto } from '../data/reference';
 
 interface ReferenceTypeInputProps {
-  type: ReferenceDto['type'];
+  type?: ReferenceDto['type'];
   activeTypes: Record<ReferenceDto['type'], boolean>;
   onSelect: (type: ReferenceDto['type']) => void;
 }
@@ -23,7 +23,7 @@ export default function ReferenceTypeInput(props: ReferenceTypeInputProps) {
         row
         aria-labelledby="demo-controlled-radio-buttons-group"
         name="controlled-radio-buttons-group"
-        value={props.type}
+        value={props.type ?? ''}
         onChange={(e) => props.onSelect(e.target.value as ReferenceDto['type'])}
       >
         <FormControlLabel

@@ -7,13 +7,13 @@ export default function MappingList() {
   const api = useApiClient();
   const columns: DataColumn<MappingDto>[] = [
     { title: 'Matcher', value: (m) => m.matcher },
-    { title: 'Reference', value: (m) => referenceSummary(m.reference) },
+    { title: 'Reference', value: (m) => referenceSummary(m.reference) ?? '' },
     { title: 'Area', value: (m) => m.area?.name ?? '' },
     { title: 'Purpose', value: (m) => m.purpose?.name ?? '' },
   ];
 
-  function referenceSummary(reference: ReferenceDto) {
-    switch (reference.type) {
+  function referenceSummary(reference?: ReferenceDto) {
+    switch (reference?.type) {
       case 'creditor': {
         return reference.creditor.name;
       }

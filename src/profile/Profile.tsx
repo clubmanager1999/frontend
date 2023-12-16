@@ -19,11 +19,6 @@ function Profile() {
       zip: '',
       city: '',
     },
-    membership: {
-      id: null as unknown as number,
-      name: '',
-      fee: 0,
-    },
   };
 
   const [profile, setProfile] = useState(defaultProfile);
