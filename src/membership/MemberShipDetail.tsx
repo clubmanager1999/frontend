@@ -54,7 +54,7 @@ export default function MembershipDetail() {
 
         setValidationErrors({} as Record<keyof MembershipDto, string>);
 
-        if (result.error) {
+        if (result.error?.fields) {
           setValidationErrors(result.error.fields);
           return;
         }
@@ -67,7 +67,7 @@ export default function MembershipDetail() {
 
         setValidationErrors({} as Record<keyof MembershipDto, string>);
 
-        if (result.error) {
+        if (result.error?.fields) {
           setValidationErrors(result.error.fields);
           return;
         }

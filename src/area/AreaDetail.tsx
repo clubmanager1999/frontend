@@ -53,7 +53,7 @@ export default function AreaDetail() {
 
         setValidationErrors({} as Record<keyof AreaDto, string>);
 
-        if (result.error) {
+        if (result.error?.fields) {
           setValidationErrors(result.error.fields);
           return;
         }
@@ -66,7 +66,7 @@ export default function AreaDetail() {
 
         setValidationErrors({} as Record<keyof AreaDto, string>);
 
-        if (result.error) {
+        if (result.error?.fields) {
           setValidationErrors(result.error.fields);
           return;
         }
