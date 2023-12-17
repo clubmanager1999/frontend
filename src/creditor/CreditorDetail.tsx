@@ -53,7 +53,7 @@ export default function CreditorDetail() {
 
         setValidationErrors({} as Record<keyof CreditorDto, string>);
 
-        if (result.error) {
+        if (result.error?.fields) {
           setValidationErrors(result.error.fields);
           return;
         }
@@ -66,7 +66,7 @@ export default function CreditorDetail() {
 
         setValidationErrors({} as Record<keyof CreditorDto, string>);
 
-        if (result.error) {
+        if (result.error?.fields) {
           setValidationErrors(result.error.fields);
           return;
         }

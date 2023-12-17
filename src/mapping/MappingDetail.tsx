@@ -115,7 +115,7 @@ export default function MappingDetail() {
 
         setValidationErrors({} as Record<keyof MappingDto, string>);
 
-        if (result.error) {
+        if (result.error?.fields) {
           setValidationErrors(result.error.fields);
           return;
         }

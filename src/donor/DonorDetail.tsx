@@ -68,7 +68,7 @@ export default function DonorDetail() {
 
         setValidationErrors({} as Record<keyof DonorDto, string>);
 
-        if (result.error) {
+        if (result.error?.fields) {
           setValidationErrors(result.error.fields);
           return;
         }
@@ -81,7 +81,7 @@ export default function DonorDetail() {
 
         setValidationErrors({} as Record<keyof DonorDto, string>);
 
-        if (result.error) {
+        if (result.error?.fields) {
           setValidationErrors(result.error.fields);
           return;
         }

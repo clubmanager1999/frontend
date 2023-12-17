@@ -153,7 +153,7 @@ export default function MemberDetail() {
 
         setValidationErrors({} as Record<keyof MemberDto, string>);
 
-        if (result.error) {
+        if (result.error?.fields) {
           setValidationErrors(result.error.fields);
           return;
         }
@@ -166,7 +166,7 @@ export default function MemberDetail() {
 
         setValidationErrors({} as Record<keyof MemberDto, string>);
 
-        if (result.error) {
+        if (result.error?.fields) {
           setValidationErrors(result.error.fields);
           return;
         }
