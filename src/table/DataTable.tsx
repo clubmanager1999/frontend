@@ -97,7 +97,7 @@ export default function DataTable<T extends Data>(props: DataTableProps<T>) {
                     {column.value(dataObject)}
                   </TableCell>
                 ))}
-                <TableCell>
+                <TableCell align="right">
                   <NavLink to={`${props.path}/${dataObject.id}`}>
                     <Button variant="contained">Edit</Button>
                   </NavLink>
