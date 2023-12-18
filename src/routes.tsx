@@ -16,6 +16,7 @@ import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import DomainIcon from '@mui/icons-material/Domain';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import AreaList from './area/AreaList';
 import AreaDetail from './area/AreaDetail';
 import PurposeList from './purpose/PurposeList';
@@ -24,6 +25,8 @@ import FlagIcon from '@mui/icons-material/Flag';
 import MappingList from './mapping/MappingList';
 import MappingDetail from './mapping/MappingDetail';
 import MoveDownIcon from '@mui/icons-material/MoveDown';
+import ReceiptList from './receipt/ReceiptList';
+import ReceiptDetail from './receipt/ReceiptDetail';
 
 export const routes: Route[] = [
   {
@@ -98,6 +101,15 @@ export const routes: Route[] = [
   {
     path: '/mappings/:id',
     element: <MappingDetail />,
+  },
+  {
+    path: '/receipts',
+    element: <ReceiptList />,
+    navEntry: { title: 'Receipts', icon: <ReceiptLongIcon /> },
+  },
+  {
+    path: '/receipts/:id',
+    element: <ReceiptDetail />,
   },
 ];
 
