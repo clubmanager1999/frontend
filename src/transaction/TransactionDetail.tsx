@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MappingDto } from '../data/mapping';
+import { TransactionDto } from '../data/transaction';
 import { Button, Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useApiClient } from '../api/ApiClientContext';
@@ -11,18 +11,24 @@ import { DonorDto } from '../data/donor';
 import { MemberDto } from '../data/member';
 import { PurposeDto } from '../data/purpose';
 import { AreaDto } from '../data/area';
-import SelectInput from './SelectInput';
-import ReferenceInput from './ReferenceInput';
-import ReferenceTypeInput from './ReferenceTypeInput';
+import SelectInput from '../mapping/SelectInput';
+import ReferenceInput from '../mapping/ReferenceInput';
+import ReferenceTypeInput from '../mapping/ReferenceTypeInput';
 import { TextInput } from '../utils/TextInput';
 import { useSetField } from '../utils/setField';
+import { DatePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
+import { ReceiptDto } from '../data/receipt';
+
+const ISO_LOCAL_DATE = 'YYYY-MM-DD';
 
 interface Options {
   creditors: CreditorDto[];
   donors: DonorDto[];
   members: MemberDto[];
-  purposes: PurposeDto[];
   areas: AreaDto[];
+  purposes: PurposeDto[];
+  receipts: ReceiptDto[];
 }
 
 function unwrap<T, E>(result: Result<T, E>) {
@@ -33,74 +39,81 @@ function unwrap<T, E>(result: Result<T, E>) {
   return result.value;
 }
 
-export default function MappingDetail() {
-  const defaultMapping: MappingDto = {
+export default function TransactionDetail() {
+  const defaultTransaction: TransactionDto = {
     id: 0,
-    matcher: '',
+    bookingDay: '',
+    valueDay: '',
+    name: '',
+    description: '',
+    amount: 0,
   };
 
   const defaultOptions: Options = {
     creditors: [],
     donors: [],
     members: [],
-    purposes: [],
     areas: [],
+    purposes: [],
+    receipts: [],
   };
 
-  const [mapping, setMapping] = useState(defaultMapping);
+  const [transaction, setTransaction] = useState(defaultTransaction);
   const [options, setOptions] = useState(defaultOptions);
   const [validationErrors, setValidationErrors] = useState(
-    {} as Record<keyof MappingDto, string>,
+    {} as Record<keyof TransactionDto, string>,
   );
   const { id } = useParams();
   const api = useApiClient();
   const navigate = useNavigate();
 
-  const setField = useSetField(setMapping);
+  const setField = useSetField(setTransaction);
 
   useEffect(() => {
     async function fetchData() {
       const creditors = unwrap(await api.creditors.getAll()) ?? [];
       const donors = unwrap(await api.donors.getAll()) ?? [];
       const members = unwrap(await api.members.getAll()) ?? [];
-      const purposes = unwrap(await api.purposes.getAll()) ?? [];
       const areas = unwrap(await api.areas.getAll()) ?? [];
+      const purposes = unwrap(await api.purposes.getAll()) ?? [];
+      const receipts = unwrap(await api.receipts.getAll()) ?? [];
 
       setOptions({
         creditors,
         donors,
         members,
-        purposes,
         areas,
+        purposes,
+        receipts,
       });
 
       if (!id || id == 'new') {
         return;
       }
 
-      const mappingResult = await api.mappings.getById(id);
+      const transactionResult = await api.transactions.getById(id);
 
-      if (mappingResult.error) {
-        console.log(mappingResult.error);
+      if (transactionResult.error) {
+        console.log(transactionResult.error);
         return;
       }
 
-      if (!mappingResult.value) {
+      if (!transactionResult.value) {
         return;
       }
 
-      setMapping(mappingResult.value);
+      setTransaction(transactionResult.value);
     }
 
     fetchData();
   }, [api, id]);
 
   async function save() {
-    if (id && mapping) {
+    if (id && transaction) {
       if (id == 'new') {
-        const result = await api.mappings.create(mapping);
+        const result = await api.transactions.create(transaction);
 
-        setValidationErrors({} as Record<keyof MappingDto, string>);
+        setValidationErrors({} as Record<keyof TransactionDto, string>);
 
         if (result?.error?.fields) {
           setValidationErrors(result.error.fields);
@@ -108,12 +121,12 @@ export default function MappingDetail() {
         }
 
         if (result.status == 201) {
-          navigate('/mappings');
+          navigate('/transactions');
         }
       } else {
-        const result = await api.mappings.update(id, mapping);
+        const result = await api.transactions.update(id, transaction);
 
-        setValidationErrors({} as Record<keyof MappingDto, string>);
+        setValidationErrors({} as Record<keyof TransactionDto, string>);
 
         if (result.error?.fields) {
           setValidationErrors(result.error.fields);
@@ -121,23 +134,10 @@ export default function MappingDetail() {
         }
 
         if (result.status == 204) {
-          navigate('/mappings');
+          navigate('/transactions');
         }
       }
     }
-  }
-
-  const purposeOptions = Object.fromEntries(
-    options.purposes.map((area) => [area.id, area.name]),
-  );
-
-  function setPurpose(id: number) {
-    const purpose = options.purposes.find((area) => area.id == id)!;
-
-    setMapping((m) => ({
-      ...m,
-      ...{ purpose },
-    }));
   }
 
   const areaOptions = Object.fromEntries(
@@ -147,9 +147,35 @@ export default function MappingDetail() {
   function setArea(id: number) {
     const area = options.areas.find((area) => area.id == id)!;
 
-    setMapping((m) => ({
+    setTransaction((m) => ({
       ...m,
       ...{ area },
+    }));
+  }
+
+  const purposeOptions = Object.fromEntries(
+    options.purposes.map((area) => [area.id, area.name]),
+  );
+
+  function setPurpose(id: number) {
+    const purpose = options.purposes.find((area) => area.id == id)!;
+
+    setTransaction((m) => ({
+      ...m,
+      ...{ purpose },
+    }));
+  }
+
+  const receiptOptions = Object.fromEntries(
+    options.receipts.map((receipt) => [receipt.id, receipt.name]),
+  );
+
+  function setReceipt(id: number) {
+    const receipt = options.receipts.find((receipt) => receipt.id == id)!;
+
+    setTransaction((m) => ({
+      ...m,
+      ...{ receipt },
     }));
   }
 
@@ -163,7 +189,7 @@ export default function MappingDetail() {
     switch (type) {
       case 'creditor':
         if (options.creditors.length > 0) {
-          setMapping((m) => ({
+          setTransaction((m) => ({
             ...m,
             ...{ reference: { type, creditor: options.creditors[0] } },
           }));
@@ -171,7 +197,7 @@ export default function MappingDetail() {
         break;
       case 'donor':
         if (options.donors.length > 0) {
-          setMapping((m) => ({
+          setTransaction((m) => ({
             ...m,
             ...{ reference: { type, donor: options.donors[0] } },
           }));
@@ -179,7 +205,7 @@ export default function MappingDetail() {
         break;
       case 'member':
         if (options.members.length > 0) {
-          setMapping((m) => ({
+          setTransaction((m) => ({
             ...m,
             ...{ reference: { type, member: options.members[0] } },
           }));
@@ -189,7 +215,7 @@ export default function MappingDetail() {
   }
 
   function setReference(reference: ReferenceDto) {
-    setMapping((m) => ({
+    setTransaction((m) => ({
       ...m,
       ...{ reference },
     }));
@@ -200,43 +226,83 @@ export default function MappingDetail() {
       <form>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+            <DatePicker
+              label="Booking date"
+              value={dayjs(transaction.bookingDay)}
+              onChange={(v) =>
+                setField('bookingDay', v?.format(ISO_LOCAL_DATE))
+              }
+            />
+            <DatePicker
+              label="Value date"
+              value={dayjs(transaction.valueDay)}
+              onChange={(v) => setField('valueDay', v?.format(ISO_LOCAL_DATE))}
+            />
+          </Stack>
+          <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <TextInput
-              label="Matcher"
-              record={mapping}
+              label="Name"
+              record={transaction}
               errors={validationErrors}
-              recordKey="matcher"
+              recordKey="name"
+              onChange={(key, value) => setField(key, value)}
+            />
+          </Stack>
+          <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+            <TextInput
+              label="Description"
+              record={transaction}
+              errors={validationErrors}
+              recordKey="description"
+              onChange={(key, value) => setField(key, value)}
+            />
+          </Stack>
+          <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+            <TextInput
+              label="Amount"
+              record={transaction}
+              errors={validationErrors}
+              recordKey="amount"
               onChange={(key, value) => setField(key, value)}
             />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <SelectInput
-              title="Purpose"
-              options={purposeOptions}
-              value={mapping.purpose?.id}
-              onChange={(id) => setPurpose(id)}
-            ></SelectInput>
-          </Stack>
-          <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
-            <SelectInput
               title="Area"
               options={areaOptions}
-              value={mapping.area?.id}
+              value={transaction.area?.id}
               onChange={(id) => setArea(id)}
             ></SelectInput>
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+            <SelectInput
+              title="Purpose"
+              options={purposeOptions}
+              value={transaction.purpose?.id}
+              onChange={(id) => setPurpose(id)}
+            ></SelectInput>
+          </Stack>
+          <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <ReferenceTypeInput
-              type={mapping?.reference?.type}
+              type={transaction?.reference?.type}
               activeTypes={activeTypes}
               onSelect={(type) => setReferenceType(type)}
             />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <ReferenceInput
-              referenceHolder={mapping}
+              referenceHolder={transaction}
               options={options}
               onSelect={(reference) => setReference(reference)}
             />
+          </Stack>
+          <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
+            <SelectInput
+              title="Receipt"
+              options={receiptOptions}
+              value={transaction.receipt?.id}
+              onChange={(id) => setReceipt(id)}
+            ></SelectInput>
           </Stack>
         </Stack>
         <Button

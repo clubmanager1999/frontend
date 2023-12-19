@@ -1,7 +1,6 @@
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { CreditorDto } from '../data/creditor';
 import { DonorDto } from '../data/donor';
-import { MappingDto } from '../data/mapping';
 import { MemberDto } from '../data/member';
 import { ReferenceDto } from '../data/reference';
 
@@ -11,8 +10,12 @@ interface ReferenceOptions {
   members: MemberDto[];
 }
 
+interface ReferenceHolder {
+  reference?: ReferenceDto;
+}
+
 interface ReferenceInputProps {
-  mapping: MappingDto;
+  referenceHolder: ReferenceHolder;
   options: ReferenceOptions;
   onSelect: (reference: ReferenceDto) => void;
 }
@@ -30,8 +33,11 @@ function getId(reference?: ReferenceDto) {
   }
 }
 
-function getValues(mapping: MappingDto, options: ReferenceOptions) {
-  switch (mapping?.reference?.type) {
+function getValues(
+  referenceHolder: ReferenceHolder,
+  options: ReferenceOptions,
+) {
+  switch (referenceHolder?.reference?.type) {
     case 'creditor':
       return options.creditors.map((x) => ({
         id: x.id,
@@ -85,10 +91,10 @@ export default function ReferenceInput(props: ReferenceInputProps) {
       <InputLabel id="reference">Reference</InputLabel>
       <Select
         labelId="reference"
-        value={getId(props.mapping.reference) ?? ''}
+        value={getId(props.referenceHolder.reference) ?? ''}
         label="Membership"
         onChange={(e) => {
-          const type = props.mapping.reference?.type;
+          const type = props.referenceHolder.reference?.type;
 
           if (type) {
             props.onSelect(
@@ -98,7 +104,7 @@ export default function ReferenceInput(props: ReferenceInputProps) {
         }}
         sx={{ width: '200px' }}
       >
-        {getValues(props.mapping, props.options).map((x) => (
+        {getValues(props.referenceHolder, props.options).map((x) => (
           <MenuItem key={x.id} value={x.id}>
             {x.title}
           </MenuItem>
