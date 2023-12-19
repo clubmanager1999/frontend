@@ -27,6 +27,9 @@ import MappingDetail from './mapping/MappingDetail';
 import MoveDownIcon from '@mui/icons-material/MoveDown';
 import ReceiptList from './receipt/ReceiptList';
 import ReceiptDetail from './receipt/ReceiptDetail';
+import TransactionList from './transaction/TransactionList';
+import TransactionDetail from './transaction/TransactionDetail';
+import PaidIcon from '@mui/icons-material/Paid';
 
 export const routes: Route[] = [
   {
@@ -110,6 +113,15 @@ export const routes: Route[] = [
   {
     path: '/receipts/:id',
     element: <ReceiptDetail />,
+  },
+  {
+    path: '/transactions',
+    element: <TransactionList />,
+    navEntry: { title: 'Transactions', icon: <PaidIcon /> },
+  },
+  {
+    path: '/transactions/:id',
+    element: <TransactionDetail />,
   },
 ];
 

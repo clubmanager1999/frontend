@@ -13,6 +13,7 @@ import { AreaDto } from '../data/area';
 import { PurposeDto } from '../data/purpose';
 import { MappingDto } from '../data/mapping';
 import { ReceiptDto } from '../data/receipt';
+import { TransactionDto } from '../data/transaction';
 
 interface ApiClientProviderProps {
   children?: ReactNode;
@@ -38,6 +39,10 @@ export default function ApiClientProvider(props: ApiClientProviderProps) {
     purposes: new CrudClient<PurposeDto>(httpClient, '/api/purposes'),
     mappings: new CrudClient<MappingDto>(httpClient, '/api/mappings'),
     receipts: new CrudClient<ReceiptDto>(httpClient, '/api/receipts'),
+    transactions: new CrudClient<TransactionDto>(
+      httpClient,
+      '/api/transactions',
+    ),
   };
 
   return (

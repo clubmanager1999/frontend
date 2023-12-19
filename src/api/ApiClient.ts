@@ -6,6 +6,7 @@ import { MemberDto } from '../data/member';
 import { MembershipDto } from '../data/membership';
 import { PurposeDto } from '../data/purpose';
 import { ReceiptDto } from '../data/receipt';
+import { TransactionDto } from '../data/transaction';
 import { CrudClient } from './CrudClient';
 import { ProfileClient } from './ProfileClient';
 
@@ -19,4 +20,5 @@ export interface ApiClient {
   purposes: CrudClient<PurposeDto>;
   mappings: CrudClient<MappingDto>;
   receipts: CrudClient<ReceiptDto>;
+  transactions: CrudClient<TransactionDto>;
 }
