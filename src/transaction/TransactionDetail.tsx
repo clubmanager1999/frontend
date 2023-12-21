@@ -272,7 +272,7 @@ export default function TransactionDetail() {
               options={areaOptions}
               value={transaction.area?.id}
               onChange={(id) => setArea(id)}
-            ></SelectInput>
+            />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <SelectInput
@@ -280,7 +280,7 @@ export default function TransactionDetail() {
               options={purposeOptions}
               value={transaction.purpose?.id}
               onChange={(id) => setPurpose(id)}
-            ></SelectInput>
+            />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <ReferenceTypeInput
@@ -302,7 +302,7 @@ export default function TransactionDetail() {
               options={receiptOptions}
               value={transaction.receipt?.id}
               onChange={(id) => setReceipt(id)}
-            ></SelectInput>
+            />
           </Stack>
         </Stack>
         <Button

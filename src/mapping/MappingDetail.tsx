@@ -214,7 +214,7 @@ export default function MappingDetail() {
               options={purposeOptions}
               value={mapping.purpose?.id}
               onChange={(id) => setPurpose(id)}
-            ></SelectInput>
+            />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <SelectInput
@@ -222,7 +222,7 @@ export default function MappingDetail() {
               options={areaOptions}
               value={mapping.area?.id}
               onChange={(id) => setArea(id)}
-            ></SelectInput>
+            />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <ReferenceTypeInput
