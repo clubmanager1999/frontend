@@ -127,32 +127,6 @@ export default function MappingDetail() {
     }
   }
 
-  const purposeOptions = Object.fromEntries(
-    options.purposes.map((area) => [area.id, area.name]),
-  );
-
-  function setPurpose(id: number) {
-    const purpose = options.purposes.find((area) => area.id == id)!;
-
-    setMapping((m) => ({
-      ...m,
-      ...{ purpose },
-    }));
-  }
-
-  const areaOptions = Object.fromEntries(
-    options.areas.map((area) => [area.id, area.name]),
-  );
-
-  function setArea(id: number) {
-    const area = options.areas.find((area) => area.id == id)!;
-
-    setMapping((m) => ({
-      ...m,
-      ...{ area },
-    }));
-  }
-
   const activeTypes = {
     creditor: options.creditors.length > 0,
     donor: options.donors.length > 0,
@@ -211,17 +185,21 @@ export default function MappingDetail() {
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <SelectInput
               title="Purpose"
-              options={purposeOptions}
-              value={mapping.purpose?.id}
-              onChange={(id) => setPurpose(id)}
+              options={options.purposes}
+              value={mapping.purpose}
+              getId={(purpose) => purpose?.id}
+              getName={(purpose) => purpose?.name}
+              onChange={(purpose) => setField('purpose', purpose)}
             />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <SelectInput
               title="Area"
-              options={areaOptions}
-              value={mapping.area?.id}
-              onChange={(id) => setArea(id)}
+              options={options.areas}
+              value={mapping.area}
+              getId={(area) => area?.id}
+              getName={(area) => area?.name}
+              onChange={(area) => setField('area', area)}
             />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
