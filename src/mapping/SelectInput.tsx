@@ -1,28 +1,35 @@
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
-interface SelectInputProps {
+interface SelectInputProps<T> {
   title: string;
-  options: Record<number, string>;
-  value?: number;
-  onChange: (id: number) => void;
+  options: T[];
+  value?: T;
+  getId: (t?: T) => number | undefined;
+  getName: (t?: T) => string | undefined;
+  onChange: (t: T) => void;
 }
 
-export default function SelectInput(props: SelectInputProps) {
+export default function SelectInput<T>(props: SelectInputProps<T>) {
+  const lookUp = Object.fromEntries(
+    props.options.map((t) => [props.getId(t), t]),
+  );
+
   return (
     <FormControl>
       <InputLabel id="label">{props.title}</InputLabel>
       <Select
         labelId="label"
         label={props.title}
-        value={props.value ?? ''}
+        value={props.getId(props.value) ?? ''}
         onChange={(e) => {
-          props.onChange(e.target.value as number);
+          props.onChange(lookUp[e.target.value as number]);
         }}
         sx={{ width: '200px' }}
       >
-        {Object.entries(props.options).map(([id, value]) => (
-          <MenuItem key={id} value={id}>
-            {value}
+        {props.options.map((t) => (
+          <MenuItem key={props.getId(t)} value={props.getId(t)}>
+            {props.getName(t)}
+            {props.getId(t)}
           </MenuItem>
         ))}
       </Select>

@@ -140,45 +140,6 @@ export default function TransactionDetail() {
     }
   }
 
-  const areaOptions = Object.fromEntries(
-    options.areas.map((area) => [area.id, area.name]),
-  );
-
-  function setArea(id: number) {
-    const area = options.areas.find((area) => area.id == id)!;
-
-    setTransaction((m) => ({
-      ...m,
-      ...{ area },
-    }));
-  }
-
-  const purposeOptions = Object.fromEntries(
-    options.purposes.map((area) => [area.id, area.name]),
-  );
-
-  function setPurpose(id: number) {
-    const purpose = options.purposes.find((area) => area.id == id)!;
-
-    setTransaction((m) => ({
-      ...m,
-      ...{ purpose },
-    }));
-  }
-
-  const receiptOptions = Object.fromEntries(
-    options.receipts.map((receipt) => [receipt.id, receipt.name]),
-  );
-
-  function setReceipt(id: number) {
-    const receipt = options.receipts.find((receipt) => receipt.id == id)!;
-
-    setTransaction((m) => ({
-      ...m,
-      ...{ receipt },
-    }));
-  }
-
   const activeTypes = {
     creditor: options.creditors.length > 0,
     donor: options.donors.length > 0,
@@ -269,17 +230,21 @@ export default function TransactionDetail() {
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <SelectInput
               title="Area"
-              options={areaOptions}
-              value={transaction.area?.id}
-              onChange={(id) => setArea(id)}
+              options={options.areas}
+              value={transaction.area}
+              getName={(area) => area?.name}
+              getId={(area) => area?.id}
+              onChange={(area) => setField('area', area)}
             />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <SelectInput
               title="Purpose"
-              options={purposeOptions}
-              value={transaction.purpose?.id}
-              onChange={(id) => setPurpose(id)}
+              options={options.purposes}
+              value={transaction.purpose}
+              getName={(purpose) => purpose?.name}
+              getId={(purpose) => purpose?.id}
+              onChange={(purpose) => setField('purpose', purpose)}
             />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
@@ -299,9 +264,11 @@ export default function TransactionDetail() {
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <SelectInput
               title="Receipt"
-              options={receiptOptions}
-              value={transaction.receipt?.id}
-              onChange={(id) => setReceipt(id)}
+              options={options.receipts}
+              value={transaction.receipt}
+              getName={(receipt) => receipt?.name}
+              getId={(receipt) => receipt?.id}
+              onChange={(receipt) => setField('receipt', receipt)}
             />
           </Stack>
         </Stack>
