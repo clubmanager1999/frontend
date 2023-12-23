@@ -137,26 +137,26 @@ export default function MappingDetail() {
     switch (type) {
       case 'creditor':
         if (options.creditors.length > 0) {
-          setMapping((m) => ({
-            ...m,
-            ...{ reference: { type, creditor: options.creditors[0] } },
-          }));
+          setField('reference', {
+            type,
+            creditor: options.creditors[0],
+          } as ReferenceDto);
         }
         break;
       case 'donor':
         if (options.donors.length > 0) {
-          setMapping((m) => ({
-            ...m,
-            ...{ reference: { type, donor: options.donors[0] } },
-          }));
+          setField('reference', {
+            type,
+            donor: options.donors[0],
+          } as ReferenceDto);
         }
         break;
       case 'member':
         if (options.members.length > 0) {
-          setMapping((m) => ({
-            ...m,
-            ...{ reference: { type, member: options.members[0] } },
-          }));
+          setField('reference', {
+            type,
+            member: options.members[0],
+          } as ReferenceDto);
         }
         break;
     }
