@@ -1,115 +1,77 @@
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { CreditorDto } from '../data/creditor';
 import { DonorDto } from '../data/donor';
 import { MemberDto } from '../data/member';
 import { ReferenceDto } from '../data/reference';
+import SelectInput from './SelectInput';
 
-interface ReferenceOptions {
+interface ReferenceTypeInputProps {
+  reference: ReferenceDto | undefined;
   creditors: CreditorDto[];
   donors: DonorDto[];
   members: MemberDto[];
+  onChange: (r: ReferenceDto) => void;
 }
 
-interface ReferenceHolder {
-  reference?: ReferenceDto;
-}
-
-interface ReferenceInputProps {
-  referenceHolder: ReferenceHolder;
-  options: ReferenceOptions;
-  onSelect: (reference: ReferenceDto) => void;
-}
-
-function getId(reference?: ReferenceDto) {
-  switch (reference?.type) {
+export default function ReferenceTypeInput(props: ReferenceTypeInputProps) {
+  switch (props.reference?.type) {
     case 'creditor':
-      return reference.creditor.id;
-    case 'donor':
-      return reference.donor.id;
-    case 'member':
-      return reference.member.id;
-    default:
-      return null;
-  }
-}
-
-function getValues(
-  referenceHolder: ReferenceHolder,
-  options: ReferenceOptions,
-) {
-  switch (referenceHolder?.reference?.type) {
-    case 'creditor':
-      return options.creditors.map((x) => ({
-        id: x.id,
-        title: x.name,
-        value: x,
-      }));
-    case 'donor':
-      return options.donors.map((x) => ({
-        id: x.id,
-        title: `${x.firstName} ${x.lastName}`,
-        value: x,
-      }));
-    case 'member':
-      return options.members.map((x) => ({
-        id: x.id,
-        title: `${x.firstName} ${x.lastName}`,
-        value: x,
-      }));
-    default:
-      return [];
-  }
-}
-
-function getReference(
-  id: number,
-  type: ReferenceDto['type'],
-  options: ReferenceOptions,
-): ReferenceDto {
-  switch (type) {
-    case 'creditor': {
-      const creditor = options.creditors.find((x) => x.id == id)!;
-
-      return { type: 'creditor', creditor };
-    }
-    case 'donor': {
-      const donor = options.donors.find((x) => x.id == id)!;
-
-      return { type: 'donor', donor };
-    }
-    case 'member': {
-      const member = options.members.find((x) => x.id == id)!;
-
-      return { type: 'member', member };
-    }
-  }
-}
-
-export default function ReferenceInput(props: ReferenceInputProps) {
-  return (
-    <FormControl>
-      <InputLabel id="reference">Reference</InputLabel>
-      <Select
-        labelId="reference"
-        value={getId(props.referenceHolder.reference) ?? ''}
-        label="Membership"
-        onChange={(e) => {
-          const type = props.referenceHolder.reference?.type;
-
-          if (type) {
-            props.onSelect(
-              getReference(e.target.value as number, type, props.options),
-            );
+      return (
+        <SelectInput
+          title="Creditor"
+          options={props.creditors}
+          value={props.reference?.creditor}
+          getId={(creditor) => creditor?.id}
+          getName={(creditor) => creditor?.name}
+          onChange={(creditor) =>
+            props.onChange({
+              type: 'creditor',
+              creditor,
+            })
           }
-        }}
-        sx={{ width: '200px' }}
-      >
-        {getValues(props.referenceHolder, props.options).map((x) => (
-          <MenuItem key={x.id} value={x.id}>
-            {x.title}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
+        />
+      );
+    case 'donor':
+      return (
+        <SelectInput
+          title="Donors"
+          options={props.donors}
+          value={props.reference?.donor}
+          getId={(donor) => donor?.id}
+          getName={(donor) => `${donor?.firstName} ${donor?.lastName}`}
+          onChange={(donor) =>
+            props.onChange({
+              type: 'donor',
+              donor,
+            })
+          }
+        />
+      );
+    case 'member':
+      return (
+        <SelectInput
+          title="Creditor"
+          options={props.members}
+          value={props.reference?.member}
+          getId={(member) => member?.id}
+          getName={(member) => `${member?.firstName} ${member?.lastName}`}
+          onChange={(member) =>
+            props.onChange({
+              type: 'member',
+              member,
+            })
+          }
+        />
+      );
+    default:
+      return (
+        <SelectInput
+          title="Reference"
+          options={[]}
+          value={null}
+          getId={() => undefined}
+          getName={() => undefined}
+          onChange={() => {}}
+        />
+      );
+  }
 }

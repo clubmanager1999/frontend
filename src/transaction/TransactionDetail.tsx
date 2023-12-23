@@ -175,13 +175,6 @@ export default function TransactionDetail() {
     }
   }
 
-  function setReference(reference: ReferenceDto) {
-    setTransaction((m) => ({
-      ...m,
-      ...{ reference },
-    }));
-  }
-
   return (
     <div>
       <form>
@@ -256,9 +249,13 @@ export default function TransactionDetail() {
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <ReferenceInput
-              referenceHolder={transaction}
-              options={options}
-              onSelect={(reference) => setReference(reference)}
+              reference={transaction.reference}
+              creditors={options.creditors}
+              donors={options.donors}
+              members={options.members}
+              onChange={(reference: ReferenceDto) =>
+                setField('reference', reference)
+              }
             />
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>

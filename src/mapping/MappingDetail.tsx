@@ -162,13 +162,6 @@ export default function MappingDetail() {
     }
   }
 
-  function setReference(reference: ReferenceDto) {
-    setMapping((m) => ({
-      ...m,
-      ...{ reference },
-    }));
-  }
-
   return (
     <div>
       <form>
@@ -211,9 +204,13 @@ export default function MappingDetail() {
           </Stack>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <ReferenceInput
-              referenceHolder={mapping}
-              options={options}
-              onSelect={(reference) => setReference(reference)}
+              reference={mapping.reference}
+              creditors={options.creditors}
+              donors={options.donors}
+              members={options.members}
+              onChange={(reference: ReferenceDto) =>
+                setField('reference', reference)
+              }
             />
           </Stack>
         </Stack>
