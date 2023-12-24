@@ -29,7 +29,6 @@ export default function SelectInput<T>(props: SelectInputProps<T>) {
         {props.options.map((t) => (
           <MenuItem key={props.getId(t)} value={props.getId(t)}>
             {props.getName(t)}
-            {props.getId(t)}
           </MenuItem>
         ))}
       </Select>
