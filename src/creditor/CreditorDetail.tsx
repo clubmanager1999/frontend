@@ -6,6 +6,7 @@ import { useApiClient } from '../api/ApiClientContext';
 import { TextInput } from '../utils/TextInput';
 import { useNavigate } from 'react-router-dom';
 import { useSetField } from '../utils/setField';
+import NoSubmitForm from '../form/NoSubmitForm';
 
 export default function CreditorDetail() {
   const defaultCreditor: CreditorDto = {
@@ -80,7 +81,7 @@ export default function CreditorDetail() {
 
   return (
     <div>
-      <form>
+      <NoSubmitForm>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <TextInput
@@ -99,7 +100,7 @@ export default function CreditorDetail() {
         >
           Save
         </Button>
-      </form>
+      </NoSubmitForm>
     </div>
   );
 }

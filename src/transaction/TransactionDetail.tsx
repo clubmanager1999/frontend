@@ -19,6 +19,7 @@ import { useSetField } from '../utils/setField';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { ReceiptDto } from '../data/receipt';
+import NoSubmitForm from '../form/NoSubmitForm';
 
 const ISO_LOCAL_DATE = 'YYYY-MM-DD';
 
@@ -177,7 +178,7 @@ export default function TransactionDetail() {
 
   return (
     <div>
-      <form>
+      <NoSubmitForm>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <DatePicker
@@ -276,7 +277,7 @@ export default function TransactionDetail() {
         >
           Save
         </Button>
-      </form>
+      </NoSubmitForm>
     </div>
   );
 }

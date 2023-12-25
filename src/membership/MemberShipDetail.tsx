@@ -6,6 +6,7 @@ import { useApiClient } from '../api/ApiClientContext';
 import { TextInput } from '../utils/TextInput';
 import { useNavigate } from 'react-router-dom';
 import { useSetField } from '../utils/setField';
+import NoSubmitForm from '../form/NoSubmitForm';
 
 export default function MembershipDetail() {
   const defaultMembership: MembershipDto = {
@@ -81,7 +82,7 @@ export default function MembershipDetail() {
 
   return (
     <div>
-      <form>
+      <NoSubmitForm>
         <Stack spacing={2} direction="row">
           <TextInput
             label="Name"
@@ -105,7 +106,7 @@ export default function MembershipDetail() {
         >
           Save
         </Button>
-      </form>
+      </NoSubmitForm>
     </div>
   );
 }

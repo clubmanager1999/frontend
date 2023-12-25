@@ -16,6 +16,7 @@ import { TextInput } from '../utils/TextInput';
 import { useNavigate } from 'react-router-dom';
 import { unrapNestedFields } from '../utils/unrapNestedFields';
 import { useSetField } from '../utils/setField';
+import NoSubmitForm from '../form/NoSubmitForm';
 
 export default function MemberDetail() {
   const defaultMember: MemberDto = {
@@ -180,7 +181,7 @@ export default function MemberDetail() {
 
   return (
     <div>
-      <form>
+      <NoSubmitForm>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <TextInput
@@ -257,7 +258,7 @@ export default function MemberDetail() {
         >
           Save
         </Button>
-      </form>
+      </NoSubmitForm>
     </div>
   );
 }

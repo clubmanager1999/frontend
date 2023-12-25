@@ -6,6 +6,7 @@ import { AddressDto } from '../data/address';
 import { TextInput } from '../utils/TextInput';
 import { unrapNestedFields } from '../utils/unrapNestedFields';
 import { useSetField } from '../utils/setField';
+import NoSubmitForm from '../form/NoSubmitForm';
 
 function Profile() {
   const defaultProfile: ProfileDto = {
@@ -66,7 +67,7 @@ function Profile() {
 
   return (
     <div>
-      <form>
+      <NoSubmitForm>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <TextInput
@@ -140,7 +141,7 @@ function Profile() {
         >
           Save
         </Button>
-      </form>
+      </NoSubmitForm>
     </div>
   );
 }

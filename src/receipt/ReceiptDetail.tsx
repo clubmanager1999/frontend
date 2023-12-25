@@ -10,6 +10,7 @@ import CreditorInput from './CreditorInput';
 import { CreditorDto } from '../data/creditor';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import NoSubmitForm from '../form/NoSubmitForm';
 
 const ISO_LOCAL_DATE = 'YYYY-MM-DD';
 
@@ -100,7 +101,7 @@ export default function ReceiptDetail() {
 
   return (
     <div>
-      <form>
+      <NoSubmitForm>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <TextInput
@@ -138,7 +139,7 @@ export default function ReceiptDetail() {
         >
           Save
         </Button>
-      </form>
+      </NoSubmitForm>
     </div>
   );
 }
