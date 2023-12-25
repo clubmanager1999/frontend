@@ -16,6 +16,7 @@ import ReferenceInput from './ReferenceInput';
 import ReferenceTypeInput from './ReferenceTypeInput';
 import { TextInput } from '../utils/TextInput';
 import { useSetField } from '../utils/setField';
+import NoSubmitForm from '../form/NoSubmitForm';
 
 interface Options {
   creditors: CreditorDto[];
@@ -164,7 +165,7 @@ export default function MappingDetail() {
 
   return (
     <div>
-      <form>
+      <NoSubmitForm>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <TextInput
@@ -221,7 +222,7 @@ export default function MappingDetail() {
         >
           Save
         </Button>
-      </form>
+      </NoSubmitForm>
     </div>
   );
 }

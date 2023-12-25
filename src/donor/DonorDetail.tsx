@@ -8,6 +8,7 @@ import { TextInput } from '../utils/TextInput';
 import { useNavigate } from 'react-router-dom';
 import { unrapNestedFields } from '../utils/unrapNestedFields';
 import { useSetField } from '../utils/setField';
+import NoSubmitForm from '../form/NoSubmitForm';
 
 export default function DonorDetail() {
   const defaultDonor: DonorDto = {
@@ -95,7 +96,7 @@ export default function DonorDetail() {
 
   return (
     <div>
-      <form>
+      <NoSubmitForm>
         <Stack spacing={2}>
           <Stack spacing={2} direction="row" sx={{ marginBottom: 4 }}>
             <TextInput
@@ -153,7 +154,7 @@ export default function DonorDetail() {
         >
           Save
         </Button>
-      </form>
+      </NoSubmitForm>
     </div>
   );
 }
